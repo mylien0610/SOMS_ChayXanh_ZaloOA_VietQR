@@ -1,0 +1,54 @@
+.contactTimer--wrapper {
+    padding: 100px 0;
+    background-color: #a18a7b0d;
+
+    .contactTimer {
+        &__content {
+            width: 40%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+
+            @media (max-width: 1023px) {
+                width: 100%;
+            }
+
+            &--tag {
+                display: inline-block;
+                font-size: 18px;
+                font-weight: 600;
+                letter-spacing: 0.9px;
+                line-height: 29.88px;
+                text-transform: uppercase;
+                color: $primary-color;
+            }
+
+            &--title {
+                font-weight: 600;
+                line-height: 50px;
+                font-family: $heading-font;
+            }
+
+            &--text {
+                color: #d3d3d3;
+                display: inline;
+                font-size: 18px;
+                line-height: 29.88px;
+
+                b {
+                    font-weight: 600;
+                }
+
+                a {
+                    text-decoration: none;
+                    transition: all 0.3s ease;
+                    color: inherit;
+
+                    &:hover {
+                        color: $primary-color;
+                    }
+                }
+            }
+        }
+    }
+}

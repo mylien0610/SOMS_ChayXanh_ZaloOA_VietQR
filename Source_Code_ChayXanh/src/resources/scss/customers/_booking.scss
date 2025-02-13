@@ -1,0 +1,16 @@
+.booking--wrapper {
+    .booking {
+        &__content {
+            text-align: center;
+            max-width: 880px;
+            width: 100%;
+            margin: 0 auto;
+            margin-bottom: 20px;
+            color: #d3d3d3;
+        }
+
+        &__form {
+            height: 336px;
+        }
+    }
+}

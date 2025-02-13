@@ -1,0 +1,121 @@
+<div class="content_container">
+  <nav class="breadcrumb">
+    <ol class="breadcrumb_container">
+      <li class="breadcrumb-item">
+        <a href="/admin/order">Danh sách</a>
+      </li>
+      <li class="breadcrumb-item">
+        <i class="fa-solid fa-angle-right"></i>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        Bàn <%= table.tableNumber %> - <%= table.type %>
+      </li>
+    </ol>
+  </nav>
+  <div class="order_main">
+    <div class="order_container">
+      <div class="food_list">
+        <% products.forEach(category => { %>
+        <div class="food_category"><%= category.title %></div>
+        <div class="foods">
+          <% category.products.forEach(product => { %>
+          <div class="food">
+            <div class="food_banner">
+              <img
+                src="/storages_image/<%= product.image %>"
+                alt="<%= product.title %>"
+              />
+            </div>
+            <div class="food_title"><%= product.title %></div>
+            <div class="food_price">
+              Giá: <%= product.price.toLocaleString() %>đ
+            </div>
+            <a
+              href="/admin/order/add/<%= table.id %>/<%= product.id %>"
+              class="food_choice btn btn_primary"
+              >Thêm</a
+            >
+          </div>
+          <% }); %>
+        </div>
+        <% }); %>
+      </div>
+      <div class="order_right">
+        <div class="order_title">
+          <h2>Bàn <%= table.tableNumber %> - <%= table.type %></h2>
+        </div>
+        <div class="order_list">
+          <% if (order && order.orderDetails && order.orderDetails.length > 0) {
+          %>
+          <table>
+            <tr>
+              <th>Tên</th>
+              <th>Số lượng</th>
+              <th>Thành tiền</th>
+              <th></th>
+            </tr>
+            <% order.orderDetails.forEach(detail => { %>
+            <tr>
+              <td><%= detail.product.title %></td>
+              <td style="white-space: nowrap">
+                <a
+                  href="/admin/order/<%= order.id %>/<%= table.id %>/<%= detail.product.id %>?type=decrease"
+                  class="btn btn_edit"
+                >
+                  <i class="fa-solid fa-minus"></i>
+                </a>
+                <span>x<%= detail.quantity %></span>
+                <a
+                  href="/admin/order/<%= order.id %>/<%= table.id %>/<%= detail.product.id %>?type=increase"
+                  class="btn btn_edit"
+                >
+                  <i class="fa-solid fa-plus"></i>
+                </a>
+              </td>
+              <td>
+                <span>
+                  <%= (detail.price * detail.quantity).toLocaleString() %>đ
+                </span>
+              </td>
+              <td>
+                <a
+                  href="/admin/order/<%= order.id %>/<%= table.id %>/<%= detail.product.id %>?type=delete"
+                  class="btn btn_delete"
+                >
+                  <i class="fa-solid fa-trash"></i>
+                </a>
+              </td>
+            </tr>
+            <% }); %>
+          </table>
+          <% } else { %>
+          <p style="padding: 10px; text-align: center">Vui lòng chọn món</p>
+          <% } %>
+        </div>
+
+        <div class="total_order">
+          <span>Tổng:</span>
+          <span>
+            <%= order && order.totalPrice !== null ?
+            order.totalPrice.toLocaleString() : '0' %> đ
+          </span>
+        </div>
+        <div class="btn_action">
+          <a href="/admin/order" class="btn btn_secondary"> Quay lại </a>
+          <% if (order && order.orderDetails && order.orderDetails.length > 0) {
+          %>
+          <a
+            href="/admin/order/checkout/<%= order.id %>"
+            class="btn btn_primary"
+            >Thanh toán</a
+          >
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/admins/js/toast.js"></script>
+<script src="/admins/js/validator.js"></script>
+<script src="/admins/js/utils.js"></script>

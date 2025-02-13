@@ -1,0 +1,75 @@
+.form {
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  padding: 10px 30px;
+
+  &_group + &_group {
+    margin-top: 8px;
+  }
+
+  &_group.invalid {
+    .form_input {
+      border-color: #ed1c24;
+    }
+  }
+
+  &_field {
+    position: relative;
+  }
+
+  &_input {
+    padding: 12px 20px;
+    border: 1px solid #e8e9ed;
+    border-radius: 4px;
+    width: 100%;
+    transition: 0.25s ease;
+    outline: none;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  &_input[type="radio"] {
+    width: auto;
+  }
+
+  &_input:hover {
+    border-color: #ccc;
+  }
+
+  &_input:focus {
+    border-color: #ccc;
+  }
+
+  &_input:not(:placeholder-shown) + &_label,
+  &_input:focus + &_label {
+    top: 0;
+    padding: 0 10px;
+    display: inline-block;
+    background-color: white;
+    color: $text-color;
+  }
+
+  &_label {
+    position: absolute;
+    top: 50%;
+    left: 21px;
+    transform: translateY(-50%);
+    user-select: none;
+    color: $text-color;
+    pointer-events: none;
+    transition: 0.25s ease;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  &_messages {
+    margin: 4px 0 0 8px;
+    font-size: 14px;
+    font-weight: 400;
+    color: $primary-color;
+    display: inline-block;
+    letter-spacing: 0.5px;
+    padding-bottom: 8px;
+  }
+}

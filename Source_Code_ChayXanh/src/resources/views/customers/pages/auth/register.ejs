@@ -1,0 +1,305 @@
+<div class="sub_page">
+  <div class="hero_area">
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container">
+          <a class="navbar-brand" href="/">
+            <span> Chay Xanh </span>
+          </a>
+          <div class="" id="">
+            <div class="User_option">
+              <a href="/login">
+                <i class="fa fa-user" aria-hidden="true"></i>
+                <span>Đăng nhập</span>
+              </a>
+              <!-- <form class="form-inline">
+                <input type="search" placeholder="Search" />
+                <button class="btn nav_search-btn" type="submit">
+                  <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+              </form> -->
+            </div>
+            <div class="custom_menu-btn">
+              <button onclick="openNav()">
+                <img src="/customers/images/menu.png" alt="" />
+              </button>
+            </div>
+            <div id="myNav" class="overlay">
+              <div class="overlay-content">
+                <a href="/">Trang chủ</a>
+                <a href="/order">Đặt bàn</a>
+                <a href="/order/order-history">Lịch sử đặt bàn</a>
+                <a href="/profile">Tài khoản</a>
+                <a href="/logout">Đăng xuất</a>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+  </div>
+
+  <!-- about section -->
+
+  <section class="about_section layout_padding">
+    <div class="container">
+      <div class="col-md-11 col-lg-10 mx-auto">
+        <div class="heading_container heading_center">
+          <h2 style="font-family: 'Open Sans', sans-serif">Đăng Ký</h2>
+        </div>
+        <div class="row">
+          <div class="col-7 mt-5">
+            <div class="login_container">
+              <div class="form_login">
+                <div class="login_title">
+                  <h1>Thông tin tài khoản</h1>
+                </div>
+                <form class="form" id="form_register">
+                  <div class="form_group">
+                    <div class="form_field">
+                      <input
+                        name="fullName"
+                        id="fullName"
+                        type="text"
+                        class="form_input"
+                        placeholder=" "
+                        autocomplete="off"
+                      />
+                      <label for="fullName" class="form_label">Họ và tên</label>
+                    </div>
+                    <span class="form_messages"></span>
+                  </div>
+
+                  <div class="form_group">
+                    <div class="form_field">
+                      <input
+                        name="email"
+                        id="email"
+                        type="email"
+                        class="form_input"
+                        placeholder=" "
+                        autocomplete="off"
+                      />
+                      <label for="email" class="form_label">Email</label>
+                    </div>
+                    <span class="form_messages"></span>
+                  </div>
+
+                  <div class="form_group">
+                    <div class="form_field">
+                      <input
+                        name="phoneNumber"
+                        id="phoneNumber"
+                        type="text"
+                        class="form_input"
+                        placeholder=" "
+                        autocomplete="off"
+                      />
+                      <label for="phoneNumber" class="form_label"
+                        >Điện thoại</label
+                      >
+                    </div>
+                    <span class="form_messages"></span>
+                  </div>
+
+                  <div class="form_group">
+                    <div class="form_field">
+                      <select name="gender" id="gender" class="form_input">
+                        <option value="1">Nam</option>
+                        <option value="0">Nữ</option>
+                      </select>
+                      <label for="gender" class="form_label">Giới tính</label>
+                    </div>
+                    <span class="form_messages"></span>
+                  </div>
+
+                  <div class="form_group">
+                    <div class="form_field">
+                      <input
+                        name="dob"
+                        id="dob"
+                        type="date"
+                        class="form_input"
+                        placeholder=" "
+                        autocomplete="off"
+                      />
+                      <label for="dob" class="form_label">Ngày sinh</label>
+                    </div>
+                    <span class="form_messages"></span>
+                  </div>
+                  <div class="form_group">
+                    <div class="form_field">
+                      <input
+                        name="password"
+                        id="password"
+                        type="password"
+                        class="form_input"
+                        placeholder=" "
+                        autocomplete="off"
+                      />
+                      <label for="password" class="form_label">Mật khẩu</label>
+                    </div>
+                    <span class="form_messages"></span>
+                  </div>
+                  <div class="form_group">
+                    <div class="form_field">
+                      <input
+                        name="password_r"
+                        id="password_r"
+                        type="password"
+                        class="form_input"
+                        placeholder=" "
+                        autocomplete="off"
+                      />
+                      <label for="password_r" class="form_label"
+                        >Nhập lại mật khẩu</label
+                      >
+                    </div>
+                    <span class="form_messages"></span>
+                  </div>
+
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                    "
+                  >
+                    <a href="/login" style="color: #555; font-weight: 400">
+                      Đăng nhập
+                    </a>
+                    <a
+                      href="/forgot-password"
+                      style="color: #555; font-weight: 400"
+                      >Quên mật khẩu?</a
+                    >
+                  </div>
+                  <div class="mt-2">
+                    <button
+                      type="submit"
+                      class="btn btn_primary"
+                      style="width: 100%; padding: 14px 12px"
+                    >
+                      Đăng ký
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-5 mt-2">
+            <div class="box">
+              <div class="col-md-7 mx-auto">
+                <div class="img-box">
+                  <img src="/admins/img/images.jpeg" class="box-img" alt="" />
+                </div>
+              </div>
+              <div class="detail-box" style="text-align: justify">
+                <p>
+                  Trải nghiệm dịch vụ đặt bàn tiện lợi và nhận ngay những ưu đãi
+                  hấp dẫn chỉ dành riêng cho thành viên của chúng tôi!
+                  <br />
+                  Dễ dàng đặt bàn: Đặt bàn nhanh chóng cho các chi nhánh trong
+                  hệ thống của chúng tôi.
+                  <br />
+
+                  Quản lý đặt chỗ: Theo dõi lịch sử và cập nhật thông tin đặt
+                  bàn dễ dàng.
+                  <br />
+
+                  Nhận thông báo khuyến mãi: Nhận các ưu đãi đặc biệt dành cho
+                  thành viên.
+                  <br />
+                  Nếu đã có tài khoản, vui lòng đăng nhập để tiếp tục.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- end about section -->
+</div>
+<script src="/admins/js/toast.js"></script>
+<script src="/admins/js/validator.js"></script>
+<script>
+  Validator({
+    form: "#form_register",
+    formGroupSelector: ".form_group",
+    errorSelector: ".form_messages",
+    rules: [
+      Validator.isRequired("#fullName", "Vui lòng nhập họ và tên."),
+      Validator.isRequired("#email", "Vui lòng nhập email."),
+      Validator.isRequired("#phoneNumber", "Vui lòng nhập số điện thoại."),
+      Validator.isNumber("#phoneNumber", "Số điện thoại bắt buộc là số."),
+      Validator.isRequired("#gender", "Vui lòng chọn giới tính."),
+      Validator.isRequired("#dob", "Vui lòng nhập ngày sinh."),
+      Validator.isRequired("#password", "Vui lòng nhập mật khẩu."),
+      Validator.minLength("#password", 6, "Mật khẩu yêu cầu ít nhất 6 ký tự"),
+      Validator.isEmail("#email", "Vui lòng nhập email hợp lệ."),
+      Validator.isRequired("#password_r", "Vui lòng nhập trường này."),
+      Validator.isConfirmed(
+        "#password_r",
+        () => {
+          return $("#password").val();
+        },
+        "Mật khẩu nhập lại không khớp"
+      ),
+    ],
+    onSubmit: (data) => {
+      if (
+        data.fullName === "" ||
+        data.email === "" ||
+        data.phoneNumber === "" ||
+        data.dob === "" ||
+        data.password === "" ||
+        data.gender === ""
+      ) {
+        toast({
+          title: "Thiếu dữ liệu",
+          message: `Vui lòng nhập lại dữ liệu`,
+          type: "waning",
+          duration: 3000,
+        });
+        return;
+      }
+      $.ajax({
+        type: "POST",
+        url: "/sign-up",
+        data: data,
+        success: function (response) {
+          if (response.code === 0) {
+            toast({
+              title: "Đăng ký tài khoản thành công",
+              message: `Đăng ký tài khoản thành công`,
+              type: "success",
+              duration: 3000,
+            });
+            // setTimeout(() => {
+            //   window.location.href = "/login";
+            // }, 1000);
+          } else {
+            toast({
+              title: "Thất bại",
+              message: response.message,
+              type: "error",
+              duration: 3000,
+            });
+          }
+        },
+        error: function (error) {
+          toast({
+            title: "Thất bại",
+            message: `Tài khoản đã tồn tại`,
+            type: "error",
+            duration: 3000,
+          });
+        },
+      });
+    },
+  });
+</script>

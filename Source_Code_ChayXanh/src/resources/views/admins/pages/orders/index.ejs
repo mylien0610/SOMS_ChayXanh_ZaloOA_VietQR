@@ -1,0 +1,202 @@
+<div class="content_container">
+  <div class="table">
+    <div class="table_head">
+      <div class="table_title">
+        <h1>Bàn ăn</h1>
+      </div>
+      <div class="table_action">
+        <ul class="table_tab">
+          <li class="active"><a href="#">Danh sách</a></li>
+        </ul>
+        <div class="table_totalItem">
+          Tổng:
+          <b id="total_item"><%= usedTablesCount %>/<%= tablesCount %></b>
+          Bàn đã sử dụng
+        </div>
+      </div>
+    </div>
+    <div class="table_main" id="table_main">
+      <!-- <div class="table_loader">
+                <div class="loader"></div>
+            </div> -->
+      <!-- <div class="top_table">
+        <div class="table_right"></div>
+        <div class="table_left"></div>
+      </div> -->
+      <div
+        class="table_content"
+        style="
+          height: calc(100vh - 170px);
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 30px;
+        "
+      >
+        <!-- Render table -->
+        <!-- Bàn trống -->
+        <div class="box_container_wrapper">
+          <h2 class="title">Bàn trống</h2>
+          <div class="box_container line-right">
+            <% tablesNoActive.forEach(table => { %>
+            <div
+              class="box <%= table.tableStatus === 'Được sử dụng' ? 'active' : (table.tableStatus === 'Đã được đặt' ? 'pending' : '') %>"
+            >
+              <div class="box_content">
+                <div class="box_top">
+                  <h2>Số bàn: <%= table.tableNumber %></h2>
+                </div>
+                <div class="box_main">
+                  <p>Trạng thái: <%= table.tableStatus %></p>
+                  <% if (table.orders.length > 0) { %>
+                  <p>
+                    Tổng tiền: <%=
+                    table.orders[0].totalPrice.toLocaleString('vi-VN') %> đ
+                  </p>
+                  <p>Nhân viên tạo: <%= table.orders[0].user.fullName %></p>
+                  <% } else { %>
+                  <p>Tổng tiền: ....</p>
+                  <p>Nhân viên tạo: ....</p>
+                  <% } %> <% if (table.orders.length > 0) { %>
+                  <div class="text-center mt-2">
+                    <a href="/admin/order/<%= table.id %>" class="btn btn_show">
+                      Chi tiết
+                      <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                  </div>
+                  <% } else { %>
+                  <div class="text-center mt-2">
+                    <a href="/admin/order/<%= table.id %>" class="btn btn_show">
+                      Gọi món
+                      <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                  </div>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+            <% }) %>
+          </div>
+        </div>
+        <!-- Bàn đc sử dụng -->
+        <div class="box_container_wrapper">
+          <h2 class="title">Bàn được sử dụng</h2>
+          <div class="box_container">
+            <% tablesActive.forEach(table => { %>
+            <div
+              class="box <%= table.tableStatus === 'Được sử dụng' ? 'active' : (table.tableStatus === 'Đã được đặt' ? 'pending' : '') %>"
+            >
+              <div class="box_content">
+                <div class="box_top">
+                  <h2>
+                    Số bàn: <%= table.tableNumber %> <%
+                    if(table.orders[0].fullName || table.orders[0].phoneNumber){
+                    %> (Được đặt trước) <% }%>
+                  </h2>
+                </div>
+                <div class="box_main">
+                  <p>Trạng thái: <%= table.tableStatus %></p>
+                  <% if (table.orders.length > 0) { %>
+                  <p>
+                    Tổng tiền: <%=
+                    table.orders[0].totalPrice.toLocaleString('vi-VN') %> đ
+                  </p>
+                  <% if(table.orders[0].fullName ||
+                  table.orders[0].phoneNumber){ %>
+                  <p>
+                    Khách hàng: <%= table.orders[0].fullName %> - <%=
+                    table.orders[0].phoneNumber %>
+                  </p>
+                  <% } %>
+                  <p>Nhân viên tạo: <%= table.orders[0].user.fullName %></p>
+                  <% } else { %>
+                  <p>Tổng tiền: ....</p>
+                  <p>Nhân viên tạo: ....</p>
+                  <% } %> <% if (table.orders.length > 0) { %>
+                  <div class="text-center mt-2">
+                    <a href="/admin/order/<%= table.id %>" class="btn btn_show">
+                      Chi tiết
+                      <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                  </div>
+                  <% } else { %>
+                  <div class="text-center mt-2">
+                    <a href="/admin/order/<%= table.id %>" class="btn btn_show">
+                      Gọi món
+                      <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                  </div>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+            <% }) %>
+          </div>
+        </div>
+        <!-- /Render table -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .box_container {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 0 10px;
+  }
+
+  .box {
+    border-radius: 10px;
+  }
+
+  .box.active .box_top {
+    background-color: #59813d;
+  }
+
+  .box.pending .box_top {
+    background-color: #ff8c00;
+  }
+
+  .box_top {
+    background-color: #ccc;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+
+  .box_main {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+
+  .line-right {
+    position: relative;
+  }
+
+  .line-right::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -15px;
+    height: calc(100%);
+    width: 2px;
+    background-color: #59813d;
+  }
+
+  .box_container_wrapper .title {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 20px;
+  }
+</style>
+
+<script src="/admins/js/table.js"></script>
+<script src="/admins/js/toast.js"></script>
+<script src="/admins/js/validator.js"></script>
+<script src="/admins/js/utils.js"></script>

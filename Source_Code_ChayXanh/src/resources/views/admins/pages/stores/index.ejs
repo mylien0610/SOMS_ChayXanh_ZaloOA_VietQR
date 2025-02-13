@@ -1,0 +1,810 @@
+<style>
+  .modal-show-store {
+    padding: 0 20px;
+  }
+
+  .chosen-container-multi .chosen-choices {
+    border-radius: 4px;
+    padding: 6px 10px !important;
+  }
+
+  .group_container {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .group_container .form_group {
+    width: 100%;
+  }
+
+  .group_container .form_action {
+    flex: 1;
+  }
+
+  .group_container .form_action .btn {
+    padding: 13px 20px;
+  }
+</style>
+
+<div class="content_container">
+  <div class="table">
+    <div class="table_head">
+      <div class="table_title">
+        <h1>Cửa hàng</h1>
+      </div>
+      <div class="table_action">
+        <ul class="table_tab">
+          <li class="active"><a href="#">Danh sách</a></li>
+          <!-- <li><a href="#">Thùng rác (10)</a></li> -->
+        </ul>
+        <div class="table_totalItem">
+          Tổng: <b id="total_item">0</b> Cửa hàng
+        </div>
+      </div>
+    </div>
+    <div class="table_main animation" id="table_main">
+      <div class="table_loader">
+        <div class="loader"></div>
+      </div>
+      <div class="top_table">
+        <div
+          class="table_right"
+          style="display: flex; align-items: center; gap: 10px"
+        >
+          <div class="form_group">
+            <div class="form_field">
+              <select
+                name="filter-active"
+                id="filter-active"
+                class="form_input"
+                style="padding: 9px 20px; border-radius: 6px"
+              >
+                <option value="all" selected>Tất cả</option>
+                <option value="1">Hoạt động</option>
+                <option value="0">Không hoạt động</option>
+              </select>
+            </div>
+          </div>
+          <div class="table_search">
+            <input
+              id="search"
+              type="text"
+              placeholder="Tìm kiếm..."
+              style="width: auto"
+            />
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+        </div>
+        <div class="table_left">
+          <button
+            class="modal-open btn btn_primary table_add"
+            data-modal-target="#create-modal"
+          >
+            Thêm mới
+          </button>
+        </div>
+      </div>
+      <div class="table_content">
+        <!-- Table root -->
+        <table id="table"></table>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .btn_delete,
+  .btn_cancel,
+  .btn_confirm {
+    display: none;
+  }
+</style>
+<!-- Modal Create -->
+<div id="create-modal" class="modal">
+  <div class="modal_container">
+    <button class="modal_close btn-close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="modal_inner">
+      <h1 class="modal_title">Thêm cửa hàng</h1>
+      <form class="form mt-5" id="form_create" style="width: 700px">
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="storeName"
+              id="storeName"
+              type="text"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="storeName" class="form_label">Tên cửa hàng</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="phoneNumber"
+              id="phoneNumber"
+              type="text"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="phoneNumber" class="form_label">Điện thoại</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+        <div class="form_group">
+          <div class="form_field">
+            <textarea
+              name="address"
+              id="address"
+              type="text"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            ></textarea>
+            <label for="address" class="form_label">Địa chỉ</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+        <div class="form_group">
+          <div class="form_field">
+            <select name="managedBy" id="managedBy" class="form_input">
+              <option value="" disabled selected hidden>-- Chọn --</option>
+            </select>
+            <label for="managedBy" class="form_label">Người quản lý</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+
+        <div class="form_group">
+          <div class="form_field">
+            <select name="active" id="active" class="form_input">
+              <option value="true">Hoạt động</option>
+              <option value="false">Không hoạt động</option>
+            </select>
+            <label for="active" class="form_label">Trạng thái</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+
+        <div class="form_action text-right">
+          <div class="btn btn_secondary modal_close">Huỷ</div>
+          <button type="submit" class="btn btn_primary">Thêm</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- /Modal Create -->
+
+<!-- Modal Edit -->
+<div id="edit-modal" class="modal">
+  <div class="modal_container">
+    <button class="modal_close btn-close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="modal_inner">
+      <h1 class="modal_title">Cập nhật cửa hàng</h1>
+      <form class="form mt-5" id="form_edit" style="width: 700px">
+        <div class="form_group" style="display: none">
+          <div class="form_field">
+            <input name="id" id="id" type="text" class="form_input" />
+          </div>
+        </div>
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="storeName"
+              id="storeName"
+              type="text"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="storeName" class="form_label">Tên cửa hàng</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="phoneNumber"
+              id="phoneNumber"
+              type="text"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="phoneNumber" class="form_label">Điện thoại</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+        <div class="form_group">
+          <div class="form_field">
+            <textarea
+              name="address"
+              id="address"
+              type="text"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            ></textarea>
+            <label for="address" class="form_label">Địa chỉ</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+        <div class="form_group">
+          <div class="form_field">
+            <select name="managedBy" id="managedBy" class="form_input">
+              <option value="" disabled selected hidden>-- Chọn --</option>
+            </select>
+            <label for="managedBy" class="form_label">Người quản lý</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+
+        <div class="form_group">
+          <div class="form_field">
+            <select name="active" id="active" class="form_input">
+              <option value="true">Hoạt động</option>
+              <option value="false">Không hoạt động</option>
+            </select>
+            <label for="active" class="form_label">Trạng thái</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+
+        <div class="form_action text-right">
+          <div class="btn btn_secondary modal_close">Huỷ</div>
+          <button type="submit" class="btn btn_primary">Cập nhật</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- /Modal Edit-->
+
+<!-- Modal delete -->
+<div id="delete-modal" class="modal">
+  <div class="modal_container">
+    <button class="modal_close btn-close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="modal_inner">
+      <h1 class="modal_title">Xoá cuẳ hàng</h1>
+      <div class="form mt-5" id="form_delete" style="width: 450px">
+        <h1>Bạn có chắc muốn xoá cuẳ hàng này?</h1>
+        <div class="form_action text-right mt-5">
+          <div class="btn btn_secondary modal_close">Huỷ</div>
+          <button type="submit" class="btn btn_primary">Xác nhận</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /Modal delete -->
+
+<!-- Modal show -->
+<div id="show-modal" class="modal">
+  <div class="modal_container">
+    <button class="modal_close btn-close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="modal_inner">
+      <h1 class="modal_title">Danh sách nhân viên</h1>
+      <div
+        class="form_container"
+        style="display: flex; width: 800px; max-height: inset"
+      >
+        <div class="modal-show-store" style="width: 100%">
+          <div
+            class="mt-4"
+            style="overflow: auto; max-height: calc(100vh - 310px)"
+          >
+            <table id="table-mini"></table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /Modal show-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
+<link
+  href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css"
+  rel="stylesheet"
+/>
+<script>
+  $(".chosen-select").chosen({
+    no_results_text: "Oops, nothing found!",
+  });
+</script>
+<script src="/admins/js/table.js"></script>
+<script src="/admins/js/toast.js"></script>
+<script src="/admins/js/table-mini.js"></script>
+<script src="/admins/js/validator.js"></script>
+
+<script>
+  const select = $("#staffIds");
+  select.chosen();
+  let storeId = null;
+  const columns = [
+    { title: "#", field: "index", width: "100px" },
+    { title: "Tên cửa hàng", field: "storeName" },
+    { title: "Địa chỉ", field: "address" },
+    { title: "Điện thoại", field: "phoneNumber" },
+    {
+      title: "Trạng thái",
+      field: "active",
+      filter: [{ true: "Hoạt động" }, { false: "Không hoạt động" }],
+      align: "center",
+    },
+    { title: "Nguời quản lý", field: "fullName" },
+  ];
+
+  const columns_table_mini = [
+    { title: "#", field: "index", width: "100px" },
+    { title: "Họ và tên", field: "fullName" },
+    { title: "Email", field: "email", width: "200px" },
+  ];
+
+  const initTableMini = () => {
+    $.ajax({
+      type: "GET",
+      url: `staffs/available-staffs/${storeId}`,
+      success: function (response) {
+        const staffs = response.data;
+        // Init table
+        renderTable_mini(staffs, columns_table_mini, false);
+      },
+      error: function (error) {
+        toast({
+          title: "Failed load staff form show",
+          message: `Error server`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  };
+
+  const init = (statusActive = "all") => {
+    $.ajax({
+      type: "GET",
+      url: `stores/all?active=${statusActive}`,
+      success: function (response) {
+        const stores = response.data;
+
+        // Init table
+        renderTable(stores, columns, true);
+
+        // Handle search
+        searchTable(stores, "#search", columns, true);
+
+        $("#table_main").removeClass("animation");
+      },
+      error: function (error) {
+        toast({
+          title: "Tải trang thất bại",
+          message: `Lỗi máy chủ`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+
+    // Fetch users and populate select input
+    $.ajax({
+      type: "GET",
+      url: "managers/getManagerNoStore",
+      success: function (response) {
+        const users = response.data;
+        const select = $("#managedBy");
+
+        select.empty();
+
+        users.forEach((user) => {
+          const option = $("<option></option>")
+            .attr("value", user.id)
+            .text(user.fullName);
+          select.append(option);
+        });
+      },
+      error: function (error) {
+        toast({
+          title: "Tải danh sách người dùng thất bại",
+          message: `Lỗi máy chủ`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  };
+
+  init();
+
+  $("#filter-active").change(function (e) {
+    let statusActiveFilter = e.target.value;
+    init(statusActiveFilter);
+  });
+
+  // Handle show modal
+  const handleShow = (id) => {
+    $("#show-modal").addClass("show");
+    storeId = id;
+    initTableMini();
+
+    $.ajax({
+      type: "GET",
+      url: `staffs/unassigned/${id}`,
+      success: function (response) {
+        const staffs = response.data;
+
+        // Xóa các option hiện tại
+        select.empty();
+
+        // Thêm các option mới từ danh sách nhân viên
+        staffs.forEach((staff) => {
+          const newOption = $("<option>", {
+            value: staff.id,
+            text: staff.fullName,
+          });
+          select.append(newOption);
+        });
+
+        // Cập nhật Chosen sau khi thêm các option mới
+        select.trigger("chosen:updated");
+      },
+      error: function (error) {
+        toast({
+          title: "Failed load staff form show",
+          message: `Error server`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  };
+
+  // Handle edit
+  const handleEdit = (id) => {
+    $("#edit-modal").addClass("show");
+    $.ajax({
+      type: "GET",
+      url: `stores/${id}`,
+      success: function (response) {
+        const store = response.data;
+        $("#form_edit #id").val(store.id);
+        $("#form_edit #storeName").val(store.storeName);
+        $("#form_edit #address").val(store.address);
+        $("#form_edit #phoneNumber").val(store.phoneNumber);
+        $("#form_edit #active").val(store.active.toString());
+
+        // Fetch users and populate select input
+        $.ajax({
+          type: "GET",
+          url: `managers/getManagerNoStore?idPlus=${store.managedBy}`,
+          success: function (usersResponse) {
+            const users = usersResponse.data;
+            const select = $("#form_edit #managedBy");
+            select.empty(); // Clear existing options
+
+            users.forEach((user) => {
+              const option = $("<option></option>")
+                .attr("value", user.id)
+                .text(user.fullName);
+              if (user.id === store.managedBy) {
+                option.attr("selected", "selected");
+              }
+              select.append(option);
+            });
+          },
+          error: function (error) {
+            toast({
+              title: "Tải danh sách người dùng thất bại",
+              message: `Lỗi máy chủ`,
+              type: "error",
+              duration: 3000,
+            });
+          },
+        });
+      },
+      error: function (error) {
+        toast({
+          title: "Thất bại",
+          message: `Lỗi hệ thống`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  };
+
+  // Delete staff in table mini
+  const handleDelete = (id) => {
+    $("#delete-modal").addClass("show");
+    $("#delete-modal .btn_primary").data("id", id);
+  };
+
+  // Delete staff in table mini
+  const handleDeleteMini = (id) => {
+    $.ajax({
+      type: "GET",
+      url: `stores/unassigned-staffs/${storeId}/${id}`,
+      success: function (response) {
+        toast({
+          title: "Thành công",
+          message: `Xóa nhân viên thành công`,
+          type: "success",
+          duration: 3000,
+        });
+        initTableMini();
+
+        // Call api get staff unassigned
+        $.ajax({
+          type: "GET",
+          url: `staffs/unassigned/${storeId}`,
+          success: function (response) {
+            const staffs = response.data;
+            // Xóa các option hiện tại
+            select.empty();
+
+            // Thêm các option mới từ danh sách nhân viên
+            staffs.forEach((staff) => {
+              const newOption = $("<option>", {
+                value: staff.id,
+                text: staff.fullName,
+              });
+              select.append(newOption);
+            });
+
+            // Cập nhật Chosen sau khi thêm các option mới
+            select.trigger("chosen:updated");
+          },
+          error: function (error) {
+            toast({
+              title: "Thất bại",
+              message: `Lỗi hệ thống`,
+              type: "error",
+              duration: 3000,
+            });
+          },
+        });
+      },
+      error: function (error) {
+        toast({
+          title: "Thất bại",
+          message: `Lỗi hệ thống`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  };
+
+  // Handle click btn delete
+  $("#delete-modal .btn_primary").on("click", function () {
+    $("#delete-modal").removeClass("show");
+    $("#table_main").addClass("animation");
+    const id = $(this).data("id");
+
+    $.ajax({
+      type: "DELETE",
+      url: `stores/${id}`,
+      success: function (response) {
+        init();
+        toast({
+          title: "Thành công",
+          message: `Xoá cửa hàng thành công`,
+          type: "success",
+          duration: 3000,
+        });
+      },
+      error: function (error) {
+        toast({
+          title: "Thất bại",
+          message: `Lỗi hệ thống`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  });
+
+  // Handle validation form create
+  Validator({
+    form: "#form_create",
+    formGroupSelector: ".form_group",
+    errorSelector: ".form_messages",
+    rules: [
+      Validator.isRequired("#storeName", "Vui lòng nhập tên cửa hàng."),
+      Validator.isRequired("#address", "Vui lòng nhập địa chỉ"),
+      Validator.isRequired("#managedBy", "Vui lòng chọn nguời quản lý"),
+      Validator.isRequired(
+        "#phoneNumber",
+        "Vui lòng nhập số điện thoại của hàng"
+      ),
+      Validator.isRequired("#active", "Vui lòng chọn trạng thái cửa hàng"),
+    ],
+    onSubmit: (data) => {
+      $("#create-modal").removeClass("show");
+      $("#table_main").addClass("animation");
+
+      $.ajax({
+        type: "POST",
+        url: "stores/",
+        data: data,
+        success: function (response) {
+          if (response.code === 1) {
+            toast({
+              title: "Thất bại",
+              message: response.message,
+              type: "error",
+              duration: 3000,
+            });
+          } else {
+            toast({
+              title: "Thành công",
+              message: `Thêm cửa hàng thành công`,
+              type: "success",
+              duration: 3000,
+            });
+          }
+          init();
+        },
+        error: function (error) {
+          toast({
+            title: "Thất bại",
+            message: `Thêm cửa hàng thất bại`,
+            type: "error",
+            duration: 3000,
+          });
+        },
+      });
+    },
+  });
+
+  // Handle validation form edit
+  Validator({
+    form: "#form_edit",
+    formGroupSelector: ".form_group",
+    errorSelector: ".form_messages",
+    rules: [
+      Validator.isRequired("#storeName", "Vui lòng nhập tên cửa hàng."),
+      Validator.isRequired("#address", "Vui lòng nhập địa chỉ"),
+      Validator.isRequired("#managedBy", "Vui lòng chọn người quản lý"),
+      Validator.isRequired(
+        "#phoneNumber",
+        "Vui lòng nhập số điện thoại của hàng"
+      ),
+      Validator.isRequired("#active", "Vui lòng chọn trạng thái cửa hàng"),
+    ],
+    onSubmit: (data) => {
+      const { id, ...restData } = data;
+      $("#edit-modal").removeClass("show");
+      $("#table_main").addClass("animation");
+
+      $.ajax({
+        type: "PUT",
+        url: `stores/${id}`,
+        data: restData,
+        success: function (response) {
+          if (response.code === 0) {
+            toast({
+              title: "Thành công",
+              message: `Cập nhật cửa hàng thành công`,
+              type: "success",
+              duration: 3000,
+            });
+          } else {
+            toast({
+              title: "Thất bại",
+              message: response.message,
+              type: "error",
+              duration: 3000,
+            });
+          }
+
+          init();
+        },
+        error: function (error) {
+          toast({
+            title: "Thất bại",
+            message: `Cập nhật cửa hàng thất bại`,
+            type: "error",
+            duration: 3000,
+          });
+        },
+      });
+    },
+  });
+
+  // form_add_staff
+  $("#form_add_staff").on("submit", function (e) {
+    e.preventDefault();
+    const staffIds = $("#form_add_staff #staffIds").val();
+    if (staffIds?.length === 0 || staffIds === null) {
+      return toast({
+        title: "Thất bại",
+        message: `Vui lòng chọn nhân viên`,
+        type: "error",
+        duration: 3000,
+      });
+    }
+
+    const staffIdsNumber = staffIds.map(Number);
+    // Handle call api
+    $.ajax({
+      type: "POST",
+      url: "stores/add-staffs",
+      data: {
+        storeId: storeId,
+        staffIds: staffIdsNumber,
+      },
+      success: function (response) {
+        if (response.code === 0) {
+          toast({
+            title: "Thành công",
+            message: `Thêm nhân viên thành công`,
+            type: "success",
+            duration: 3000,
+          });
+          initTableMini();
+
+          // Call api get staff unassigned
+          $.ajax({
+            type: "GET",
+            url: `staffs/unassigned/${storeId}`,
+            success: function (response) {
+              const staffs = response.data;
+              // Xóa các option hiện tại
+              select.empty();
+
+              // Thêm các option mới từ danh sách nhân viên
+              staffs.forEach((staff) => {
+                const newOption = $("<option>", {
+                  value: staff.id,
+                  text: staff.fullName,
+                });
+                select.append(newOption);
+              });
+
+              // Cập nhật Chosen sau khi thêm các option mới
+              select.trigger("chosen:updated");
+            },
+            error: function (error) {
+              toast({
+                title: "Thất bại",
+                message: `Lỗi hệ thống`,
+                type: "error",
+                duration: 3000,
+              });
+            },
+          });
+        } else {
+          toast({
+            title: "Thất bại",
+            message: response.message,
+            type: "error",
+            duration: 3000,
+          });
+        }
+      },
+      error: function (error) {
+        toast({
+          title: "Thất bại",
+          message: `Lỗi hệ thống`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  });
+</script>

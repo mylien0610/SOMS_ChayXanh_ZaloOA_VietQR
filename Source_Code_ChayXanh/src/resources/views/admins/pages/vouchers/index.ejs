@@ -1,0 +1,602 @@
+<div class="content_container">
+  <div class="table">
+    <div class="table_head">
+      <div class="table_title">
+        <h1>Voucher</h1>
+      </div>
+      <div class="table_action">
+        <ul class="table_tab">
+          <li class="active"><a href="#">Danh sách</a></li>
+        </ul>
+        <div class="table_totalItem">
+          Tổng: <b id="total_item">0</b> Voucher
+        </div>
+      </div>
+    </div>
+    <div class="table_main animation" id="table_main">
+      <div class="table_loader">
+        <div class="loader"></div>
+      </div>
+      <div class="top_table">
+        <div class="table_right">
+          <div class="table_search">
+            <input id="search" type="text" placeholder="Tìm kiếm..." />
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+        </div>
+        <% if(user.roleId === 1){ %>
+        <div class="table_left">
+          <button
+            class="modal-open btn btn_primary table_add"
+            data-modal-target="#create-modal"
+          >
+            Thêm mới
+          </button>
+        </div>
+        <% } %>
+      </div>
+      <div class="table_content">
+        <!-- Table root -->
+        <table id="table"></table>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .btn_cancel,
+  .btn_confirm {
+    display: none;
+  }
+
+  .btn_edit,
+  .btn_delete {
+    display: <%= user.roleId === 1 ? `inline-block` :  `none`  %>;
+  }
+</style>
+<!-- Modal Create -->
+<div id="create-modal" class="modal">
+  <div class="modal_container">
+    <button class="modal_close btn-close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="modal_inner">
+      <h1 class="modal_title">Thêm voucher</h1>
+      <form class="form mt-5" id="form_create" style="width: 500px">
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="title"
+              id="title"
+              type="text"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="title" class="form_label">Tên voucher</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="voucherCode"
+              id="voucherCode"
+              type="text"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="voucherCode" class="form_label">Mã voucher</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="value"
+              id="value"
+              type="number"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="value" class="form_label">Giá trị (%)</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="dateStart"
+              id="dateStart"
+              type="date"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="dateStart" class="form_label">Ngày áp dụng</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="dateEnd"
+              id="dateEnd"
+              type="date"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="dateEnd" class="form_label">Ngày kết thúc</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="quantity"
+              id="quantity"
+              type="number"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="quantity" class="form_label">Số lượng</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+        <div class="form_action text-right">
+          <div class="btn btn_secondary modal_close">Huỷ</div>
+          <button type="submit" class="btn btn_primary">Thêm</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- /Modal Create -->
+
+<!-- Modal Edit -->
+<div id="edit-modal" class="modal">
+  <div class="modal_container">
+    <button class="modal_close btn-close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="modal_inner">
+      <h1 class="modal_title">Cập nhật voucher</h1>
+      <form class="form mt-5" id="form_edit" style="width: 400px">
+        <div class="form_group" style="display: none">
+          <div class="form_field">
+            <input name="id" id="id" type="text" class="form_input" />
+          </div>
+        </div>
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="title"
+              id="edit_title"
+              type="text"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="edit_title" class="form_label">Tên voucher</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="voucherCode"
+              id="edit_voucherCode"
+              type="text"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="edit_voucherCode" class="form_label">Mã voucher</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="value"
+              id="edit_value"
+              type="number"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="edit_value" class="form_label">Giá trị (%)</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="dateStart"
+              id="edit_dateStart"
+              type="date"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="edit_dateStart" class="form_label">Ngày áp dụng</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="dateEnd"
+              id="edit_dateEnd"
+              type="date"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="edit_dateEnd" class="form_label">Ngày kết thúc</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="quantity"
+              id="edit_quantity"
+              type="number"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="edit_quantity" class="form_label">Số lượng</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+        <div class="form_action text-right">
+          <div class="btn btn_secondary modal_close">Huỷ</div>
+          <button type="submit" class="btn btn_primary">Cập nhật</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- /Modal Edit-->
+
+<!-- Modal delete -->
+<div id="delete-modal" class="modal">
+  <div class="modal_container">
+    <button class="modal_close btn-close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="modal_inner">
+      <h1 class="modal_title">Xoá voucher</h1>
+      <div class="form mt-5" id="form_delete" style="width: 450px">
+        <h1>Bạn có chắc muốn xoá khuyến mãi này?</h1>
+        <div class="form_action text-right mt-5">
+          <div class="btn btn_secondary modal_close">Huỷ</div>
+          <button type="submit" class="btn btn_primary">Xác nhận</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /Modal delete -->
+
+<!-- Modal show -->
+<div id="show-modal" class="modal">
+  <div class="modal_container">
+    <button class="modal_close btn-close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="modal_inner">
+      <h1 class="modal_title">
+        Số hóa đơn sử dụng voucher: <span id="voucher_name"></span>
+      </h1>
+      <div
+        class="form_container"
+        style="display: flex; width: 900px; max-height: inset"
+      >
+        <div class="modal-show-store" style="width: 100%">
+          <div
+            class="mt-4"
+            style="overflow: auto; max-height: calc(100vh - 310px)"
+          >
+            <table id="table-mini"></table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /Modal show-->
+
+<script src="/admins/js/table.js"></script>
+<script src="/admins/js/toast.js"></script>
+<script src="/admins/js/validator.js"></script>
+<script src="/admins/js/utils.js"></script>
+<script src="/admins/js/table-mini.js"></script>
+
+<script>
+  const columns = [
+    { title: "#", field: "index", width: "50px" },
+    { title: "Tên voucher", field: "title", align: "center" },
+    { title: "Mã voucher", field: "voucherCode", align: "center" },
+    { title: "Giá trị (%)", field: "value", align: "center" },
+    {
+      title: "Ngày áp dụng",
+      field: "dateStart",
+      align: "center",
+      type: "date",
+    },
+    {
+      title: "Ngày kết thúc",
+      field: "dateEnd",
+      align: "center",
+      type: "date",
+    },
+    { title: "Số lượng còn lại", field: "quantity", align: "center" },
+    { title: "Số lần sử dụng", field: "usageCount", align: "center" },
+  ];
+
+  const columns_table_mini = [
+    { title: "#", field: "index", width: "100px" },
+    { title: "Mã hóa đơn", field: "id", align: "center" },
+    {
+      title: "Số bàn",
+      field: "tableNumber",
+      align: "center",
+    },
+    {
+      title: "Tổng tiền",
+      field: "totalPrice",
+      type: "format",
+      align: "center",
+    },
+    {
+      title: "Phương thức thanh toán",
+      field: "paymentMethod",
+      align: "center",
+    },
+    {
+      title: "Trạng thái",
+      field: "statusPay",
+      align: "center",
+    },
+    {
+      title: "Ngày thanh toán",
+      field: "updatedAt",
+      type: "date",
+      align: "center",
+    },
+  ];
+
+  const init = () => {
+    $.ajax({
+      type: "GET",
+      url: "vouchers/all",
+      success: function (response) {
+        const vouchers = response.data;
+
+        // Init table
+        renderTable(vouchers, columns, true);
+
+        // Handle search
+        searchTable(vouchers, "#search", columns, true);
+
+        $("#table_main").removeClass("animation");
+      },
+      error: function (error) {
+        toast({
+          title: "Tải trang thất bại",
+          message: `Lỗi máy chủ`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  };
+
+  init();
+
+  // Handle edit
+  const handleEdit = (id) => {
+    $("#edit-modal").addClass("show");
+    $.ajax({
+      type: "GET",
+      url: `vouchers/${id}`,
+      success: function (response) {
+        const voucher = response.data;
+        $("#form_edit #id").val(voucher.id);
+        $("#form_edit #edit_title").val(voucher.title);
+        $("#form_edit #edit_voucherCode").val(voucher.voucherCode);
+        $("#form_edit #edit_value").val(voucher.value);
+        $("#form_edit #edit_dateStart").val(formatDate(voucher.dateStart));
+        $("#form_edit #edit_dateEnd").val(formatDate(voucher.dateEnd));
+        $("#form_edit #edit_quantity").val(voucher.quantity);
+      },
+      error: function (error) {
+        toast({
+          title: "Thất bại",
+          message: `Lỗi hệ thống`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  };
+
+  const handleDelete = (id) => {
+    $("#delete-modal").addClass("show");
+    $("#delete-modal .btn_primary").data("id", id);
+  };
+
+  // Handle click btn delete
+  $("#delete-modal .btn_primary").on("click", function () {
+    $("#delete-modal").removeClass("show");
+    $("#table_main").addClass("animation");
+    const id = $(this).data("id");
+
+    $.ajax({
+      type: "DELETE",
+      url: `vouchers/${id}`,
+      success: function (response) {
+        init();
+        toast({
+          title: "Thành công",
+          message: `Xoá voucher thành công`,
+          type: "success",
+          duration: 3000,
+        });
+      },
+      error: function (error) {
+        toast({
+          title: "Thất bại",
+          message: `Lỗi hệ thống`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  });
+
+  // Handle validation form create
+  Validator({
+    form: "#form_create",
+    formGroupSelector: ".form_group",
+    errorSelector: ".form_messages",
+    rules: [
+      Validator.isRequired("#title", "Vui lòng nhập tên voucher."),
+      Validator.isRequired("#voucherCode", "Vui lòng nhập mã voucher."),
+      Validator.isRequired("#value", "Vui lòng nhập giá trị voucher."),
+      Validator.isNumber("#value", "Giá trị voucher phải là số."),
+      Validator.isRequired("#dateStart", "Vui lòng chọn ngày áp dụng."),
+      Validator.isRequired("#dateEnd", "Vui lòng chọn ngày kết thúc."),
+      Validator.isRequired("#quantity", "Vui lòng nhập số lượng."),
+      Validator.isNumber("#quantity", "Số lượng phải là số."),
+      Validator.isDateAfter(
+        "#dateEnd",
+        "#dateStart",
+        "Ngày kết thúc phải sau ngày áp dụng."
+      ),
+    ],
+    onSubmit: (data) => {
+      $("#create-modal").removeClass("show");
+      $("#table_main").addClass("animation");
+
+      $.ajax({
+        type: "POST",
+        url: "vouchers/",
+        data: data,
+        success: function (response) {
+          if (response.code === 0) {
+            toast({
+              title: "Thành công",
+              message: `Thêm voucher thành công`,
+              type: "success",
+              duration: 3000,
+            });
+          } else {
+            toast({
+              title: "Thất bại",
+              message: response.message,
+              type: "error",
+              duration: 3000,
+            });
+          }
+          init();
+        },
+        error: function (error) {
+          toast({
+            title: "Thất bại",
+            message: `Thêm voucher thất bại`,
+            type: "error",
+            duration: 3000,
+          });
+        },
+      });
+    },
+  });
+
+  // Handle validation form edit
+  Validator({
+    form: "#form_edit",
+    formGroupSelector: ".form_group",
+    errorSelector: ".form_messages",
+    rules: [
+      Validator.isRequired("#edit_title", "Vui lòng nhập tên voucher."),
+      Validator.isRequired("#edit_voucherCode", "Vui lòng nhập mã voucher."),
+      Validator.isRequired("#edit_value", "Vui lòng nhập giá trị voucher."),
+      Validator.isNumber("#edit_value", "Giá trị voucher phải là số."),
+      Validator.isRequired("#edit_dateStart", "Vui lòng chọn ngày áp dụng."),
+      Validator.isRequired("#edit_dateEnd", "Vui lòng chọn ngày kết thúc."),
+      Validator.isRequired("#edit_quantity", "Vui lòng nhập số lượng."),
+      Validator.isNumber("#edit_quantity", "Số lượng phải là số."),
+      Validator.isDateAfter(
+        "#edit_dateEnd",
+        "#edit_dateStart",
+        "Ngày kết thúc phải sau ngày áp dụng."
+      ),
+    ],
+    onSubmit: (data) => {
+      const { id, ...restData } = data;
+      $("#edit-modal").removeClass("show");
+      $("#table_main").addClass("animation");
+
+      $.ajax({
+        type: "PUT",
+        url: `vouchers/${id}`,
+        data: restData,
+        success: function (response) {
+          if (response.code === 0) {
+            toast({
+              title: "Thành công",
+              message: `Cập nhật voucher thành công`,
+              type: "success",
+              duration: 3000,
+            });
+          } else {
+            toast({
+              title: "Thất bại",
+              message: response.message,
+              type: "error",
+              duration: 3000,
+            });
+          }
+          init();
+        },
+        error: function (error) {
+          toast({
+            title: "Thất bại",
+            message: `Cập nhật voucher thất bại`,
+            type: "error",
+            duration: 3000,
+          });
+        },
+      });
+    },
+  });
+
+  const handleShow = (id) => {
+    $("#show-modal").addClass("show");
+
+    $.ajax({
+      url: `/admin/vouchers/getOrders/${id}`,
+      method: "GET",
+      success: (response) => {
+        $("#voucher_name").text(response.voucherTitle);
+        renderTable_mini(response.data, columns_table_mini, false);
+      },
+      error: () => {
+        toast({
+          title: "Thất bại",
+          message: `Lấy hóa đơn thất bại`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  };
+</script>

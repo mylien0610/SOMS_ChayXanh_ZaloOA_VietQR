@@ -1,0 +1,124 @@
+.header {
+  height: $header-height;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+  border-bottom: $style-border-header;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  background-color: $white-color;
+
+  &_left {
+    width: 350px;
+    display: flex;
+    align-items: center;
+  }
+
+  &_logo {
+    min-width: 250px;
+    margin-right: 16px;
+    text-align: center;
+
+    .logo_link {
+      text-transform: uppercase;
+      color: $primary-color;
+      font-size: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      text-shadow: 5px 5px rgba($color: $primary-color, $alpha: 0.1);
+
+      img {
+        width: 30px;
+        height: 30px;
+        object-fit: cover;
+      }
+    }
+  }
+
+  .button-toggle-sidebar {
+    width: 40px;
+    line-height: 1;
+    text-align: right;
+    user-select: none;
+
+    i {
+      font-size: 18px;
+      color: $text-color;
+      padding: 10px;
+      cursor: pointer;
+    }
+  }
+
+  &_right {
+    flex: 1;
+    display: flex;
+    justify-content: end;
+    height: 100%;
+
+    .user {
+      min-width: 150px;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      gap: 10px;
+      color: $text-color;
+      cursor: pointer;
+      user-select: none;
+    }
+  }
+
+  &_menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    min-width: 160px;
+    background-color: $white-color;
+    padding: 10px 0;
+    border-radius: 8px;
+    z-index: 99;
+    box-shadow: $style-shadow;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3 ease;
+
+    &::after {
+      content: "";
+      position: absolute;
+      right: 20px;
+      top: -26px;
+      border-width: 16px 20px;
+      border-style: solid;
+      border-color: transparent transparent $white-color transparent;
+      cursor: pointer;
+    }
+
+    .menu_item {
+      list-style: none;
+
+      &:hover {
+        .menu_link {
+          color: $primary-color;
+          background-color: #fafafa;
+        }
+      }
+    }
+
+    .menu_link {
+      color: $text-color;
+      font-size: 14px;
+      display: block;
+      padding: 8px 10px;
+      transition: all 0.3s ease;
+
+      i {
+        margin-left: 10px;
+      }
+    }
+  }
+}

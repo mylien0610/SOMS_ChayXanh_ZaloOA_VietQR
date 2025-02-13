@@ -1,0 +1,129 @@
+<header class="header">
+  <div class="header_left">
+    <div class="header_logo">
+      <a href="home" class="logo_link">
+        <img src="/admins/img/images.jpeg" alt="Restaurant" />
+        Chay Xanh
+      </a>
+    </div>
+    <div class="button-toggle-sidebar" id="button-toggle-sidebar">
+      <i class="fa-solid fa-bars"></i>
+    </div>
+  </div>
+  <% if(user.roleId ==1){ %>
+  <div class="header_middle">
+    <p class="store_name"><%= store.storeName %></p>
+    <a
+      href="/admin/choice-store"
+      class="btn btn_confirm"
+      style="display: block"
+    >
+      <i class="fa-solid fa-retweet"></i>
+    </a>
+  </div>
+  <% } %>
+  <div class="header_right">
+    <% if(user.roleId === 1){ %>
+    <div class="user_role">Admin (root) -</div>
+    <% }else if(user.roleId === 2){ %>
+    <div class="user_role">Cửa hàng trưởng -</div>
+    <% }else{ %>
+    <div class="user_role">Nhân viên -</div>
+    <% } %>
+    <div class="user dropdown">
+      <div class="user_avatar">
+        <i class="fa-regular fa-user"></i>
+      </div>
+      <div class="user_name"><%= user.fullName %></div>
+      <ul class="menu header_menu">
+        <li class="menu_item">
+          <a
+            class="menu_link modal-open"
+            data-modal-target="#change-pass-modal"
+            href="#"
+            >Đổi mật khẩu</a
+          >
+        </li>
+        <li class="menu_item">
+          <a class="menu_link" href="/admin/logout">
+            Đăng xuất
+            <i class="fa-solid fa-right-to-bracket"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</header>
+<!-- Modal Create -->
+<div id="change-pass-modal" class="modal">
+  <div class="modal_container">
+    <button class="modal_close btn-close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="modal_inner">
+      <h1 class="modal_title">Đổi mật khẩu</h1>
+      <form class="form mt-5" id="form_change-pass" style="width: 500px">
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="password"
+              id="change_password"
+              type="password"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="change_password" class="form_label">Mật khẩu cũ</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="newPassword"
+              id="new-password"
+              type="password"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="new-password" class="form_label">Mật khẩu mới</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="newPassword_r"
+              id="new-password_r"
+              type="password"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="new-password_r" class="form_label"
+              >Nhập lại mật khẩu</label
+            >
+          </div>
+          <span class="form_messages"></span>
+        </div>
+
+        <div class="form_action text-right">
+          <button style="width: 100%" type="submit" class="btn btn_primary">
+            Đổi mật khẩu
+          </button>
+          <!-- <div class="btn btn_secondary modal_close">Huỷ</div> -->
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- /Modal Create -->
+<style>
+  .header_middle {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+</style>

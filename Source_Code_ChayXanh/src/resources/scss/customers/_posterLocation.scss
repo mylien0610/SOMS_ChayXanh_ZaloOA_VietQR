@@ -1,0 +1,177 @@
+.posterLocation--wrapper {
+    margin-bottom: 100px;
+    .posterLocation {
+        display: flex;
+        gap: 60px;
+        position: relative;
+
+        &__img {
+            display: flex;
+            gap: 10px;
+
+            &--child {
+                position: relative;
+
+                &:hover {
+                    .posterLocation__img--child__banner {
+                        img {
+                            transform: scale(1.07);
+                        }
+                    }
+                }
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    inset: 0;
+                    background-color: #151318;
+                    opacity: 0.3;
+                    z-index: 1;
+                }
+
+                &__banner {
+                    overflow: hidden;
+
+                    img {
+                        width: 100%;
+                        object-fit: cover;
+                        transition: all 0.3s ease;
+                    }
+                }
+
+                &__content {
+                    position: absolute;
+                    bottom: 30px;
+                    right: 50%;
+                    transform: translateX(50%);
+                    text-align: center;
+                    z-index: 5;
+                    width: 100%;
+                    padding: 0 30px;
+
+                    &.content--top {
+                        top: 30px;
+                    }
+
+                    &--tag {
+                        font-size: 13px;
+                        letter-spacing: 0.5px;
+                        text-transform: uppercase;
+                        font-weight: 600;
+                    }
+
+                    &--title {
+                        text-transform: uppercase;
+                        font-size: 38px;
+                        font-weight: 600;
+                        line-height: 1;
+                        font-family: $heading-font;
+                        margin: 12px 0;
+                    }
+
+                    &--link {
+                        a {
+                            margin-right: 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        &__content {
+            max-width: 45%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            &--tag {
+                font-weight: 600;
+                letter-spacing: 0.8px;
+                line-height: 26.56px;
+                text-transform: uppercase;
+                color: $primary-color;
+            }
+
+            &--title {
+                font-size: 50px;
+                font-weight: 600;
+                line-height: 50px;
+                font-family: $heading-font;
+            }
+
+            &--text {
+                color: #d3d3d3;
+                font-size: 18px;
+                line-height: 29.88px;
+
+                b {
+                    font-weight: 600;
+                }
+
+                i {
+                    min-width: 20px;
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+
+    @media (max-width: 1023px) {
+        margin-bottom: 60px;
+
+        .posterLocation {
+            flex-direction: column;
+
+            &__content {
+                max-width: 100%;
+                gap: 15px 0;
+
+                &__content {
+                }
+            }
+        }
+    }
+
+    @media (max-width: 739px) {
+        margin-bottom: 60px;
+
+        .posterLocation {
+            &__img {
+                flex-direction: column;
+
+                &--child {
+                    &__content {
+                        &--tag {
+                            font-size: 11px;
+                        }
+
+                        &--title {
+                            font-size: 28px;
+                        }
+
+                        &--link {
+                            a {
+                                font-size: 11px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            &__content {
+                max-width: 100%;
+                gap: 15px 0;
+
+                &--title {
+                    font-size: 32px;
+                }
+
+                &--tag,
+                &--text {
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}

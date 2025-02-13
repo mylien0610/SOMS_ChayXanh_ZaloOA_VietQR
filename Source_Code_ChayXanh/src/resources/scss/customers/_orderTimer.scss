@@ -1,0 +1,190 @@
+.orderTimer {
+    display: flex;
+
+    &__box:last-child {
+        background-image: url('/customers/img/link-bg-2.jpg');
+
+        &::after {
+            background-color: #1c1a20;
+        }
+    }
+
+    &__box {
+        width: 50%;
+        display: block;
+        text-align: center;
+        background-image: url('/customers/img/img-47.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        transition: width 0.8s cubic-bezier(0.36, 0.33, 0, 1);
+        position: relative;
+
+        &::after {
+            content: ' ';
+            position: absolute;
+            inset: 0;
+            background-color: #151318;
+            z-index: 1;
+            transition: all 0.5s ease;
+        }
+
+        &:hover {
+            width: 60%;
+
+            &::after {
+                background-color: transparent;
+            }
+
+            .orderTimer__box--content {
+                color: inherit;
+
+                &__tag {
+                    color: inherit;
+                }
+            }
+        }
+
+        &--content {
+            padding: 180px 70px;
+            color: #d3d3d3;
+            position: relative;
+            z-index: 2;
+
+            &__tag {
+                font-size: 13px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                color: $primary-color;
+                margin-bottom: 20px;
+                transition: all 0.3s ease;
+            }
+
+            &__title {
+                line-height: 1;
+                text-transform: uppercase;
+                font-weight: 600;
+                font-size: 50px;
+                font-family: $heading-font;
+                margin-bottom: 20px;
+            }
+
+            &__desc {
+                font-size: 18px;
+                line-height: 1.66;
+                margin-bottom: 20px;
+            }
+
+            &__timeOpen {
+                margin-bottom: 20px;
+                span {
+                    text-transform: uppercase;
+                    font-weight: 600;
+                }
+            }
+
+            &__btn {
+                a {
+                    margin-right: 0;
+
+                    &::after {
+                        background-color: $primary-color;
+                    }
+                }
+            }
+        }
+
+        &--link {
+            position: absolute;
+            inset: 0;
+            z-index: 9;
+        }
+    }
+
+    // Tablet
+    @media (max-width: 1023px) {
+        &__box {
+            &:hover {
+                width: 50%;
+
+                .orderTimer__box--content {
+                    color: none;
+
+                    &__tag {
+                        color: none;
+                    }
+                }
+            }
+
+            &::after {
+                display: none;
+            }
+
+            &--content {
+                padding: 80px 50px;
+                z-index: 1;
+
+                &__tag {
+                    font-size: 13px;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    color: $primary-color;
+                    margin-bottom: 20px;
+                    transition: all 0.3s ease;
+                }
+
+                &__title {
+                    font-size: 36px;
+                }
+
+                &__desc {
+                    font-size: 18px;
+                    line-height: 1.66;
+                    margin-bottom: 20px;
+                }
+
+                &__timeOpen {
+                    margin-bottom: 20px;
+                    span {
+                        text-transform: uppercase;
+                        font-weight: 600;
+                    }
+                }
+
+                &__btn {
+                    a {
+                        margin-right: 0;
+
+                        &::after {
+                            background-color: $primary-color;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Mobile
+    @media (max-width: 739px) {
+        flex-direction: column;
+
+        &__box {
+            width: 100%;
+
+            &:hover {
+                width: 100%;
+            }
+
+            &::after {
+                display: block;
+                z-index: 1;
+            }
+
+            &--content {
+                z-index: 5;
+            }
+        }
+    }
+}

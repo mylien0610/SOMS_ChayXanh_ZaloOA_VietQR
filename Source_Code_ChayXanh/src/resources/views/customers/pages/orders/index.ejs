@@ -1,0 +1,363 @@
+<div class="sub_page">
+  <div class="hero_area">
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container">
+          <a class="navbar-brand" href="/">
+            <span> Chay Xanh </span>
+          </a>
+          <div class="" id="">
+            <div class="User_option">
+              <% if(customer){ %>
+              <a href="/profile">
+                <i class="fa fa-user" aria-hidden="true"></i>
+                <span><%= customer.fullName %></span>
+              </a>
+              <% }else{ %>
+              <a href="/login">
+                <i class="fa fa-user" aria-hidden="true"></i>
+                <span>Đăng nhập</span>
+              </a>
+              <% } %>
+              <!-- <form class="form-inline">
+                <input type="search" placeholder="Search" />
+                <button class="btn nav_search-btn" type="submit">
+                  <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+              </form> -->
+            </div>
+            <div class="custom_menu-btn">
+              <button onclick="openNav()">
+                <img src="/customers/images/menu.png" alt="" />
+              </button>
+            </div>
+            <div id="myNav" class="overlay">
+              <div class="overlay-content">
+                <a href="/">Trang chủ</a>
+                <a href="/order">Đặt bàn</a>
+                <a href="/order/order-history">Lịch sử đặt bàn</a>
+                <a href="/profile">Tài khoản</a>
+                <a href="/logout">Đăng xuất</a>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+  </div>
+
+  <!-- about section -->
+  <section class="order-section layout_padding">
+    <div class="container">
+      <div class="col-md-11 col-lg-10 mx-auto">
+        <div class="heading_container heading_center">
+          <h2 style="font-family: 'Open Sans', sans-serif">
+            Đặt bàn trực tuyến
+          </h2>
+          <h5 class="mt-2">Đặt bàn tại các nhà hàng của chúng tôi</h5>
+        </div>
+        <form>
+          <div class="row mt-5">
+            <div class="col-2">
+              <div class="form_group">
+                <div class="form_field">
+                  <select name="store" id="store" class="form_input">
+                    <option value="" selected>Chọn Chi nhánh</option>
+                    <% stores.forEach(function(store) { %>
+                    <option value="<%= store.id %>">
+                      <%= store.storeName %> - <%= store.address %>
+                    </option>
+                    <% }); %>
+                    <option selected value="all">Tất cả</option>
+                  </select>
+                  <label for="store" class="form_label">Chi nhánh</label>
+                </div>
+                <span class="form_messages"></span>
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="form_group">
+                <div class="form_field">
+                  <input
+                    type="number"
+                    class="form_input"
+                    value="2"
+                    name="peopleNumber"
+                    id="peopleNumber"
+                  />
+                  <label for="peopleNumber" class="form_label"
+                    >Số lượng người</label
+                  >
+                </div>
+                <span class="form_messages"></span>
+              </div>
+            </div>
+
+            <div class="col-3">
+              <div class="form_group">
+                <div class="form_field">
+                  <input
+                    type="date"
+                    class="form_input"
+                    name="date"
+                    id="date"
+                    min=""
+                    value="<%= date  %>"
+                  />
+                  <label for="date" class="form_label">Ngày</label>
+                </div>
+                <span class="form_messages"></span>
+              </div>
+            </div>
+            <div class="col-2">
+              <div class="form_group">
+                <div class="form_field">
+                  <select name="time" id="time" class="form_input">
+                    <option <% time %>value="09:45">09:45</option>
+                    <option value="10:00">10:00</option>
+                    <option value="10:15">10:15</option>
+                    <option value="10:30">10:30</option>
+                    <option value="10:45">10:45</option>
+                    <option value="11:00">11:00</option>
+                    <option value="11:15">11:15</option>
+                    <option value="11:30">11:30</option>
+                    <option value="11:45">11:45</option>
+                    <option value="12:00">12:00</option>
+                    <option value="12:15">12:15</option>
+                    <option value="12:30">12:30</option>
+                    <option value="12:45">12:45</option>
+                    <option value="13:00">13:00</option>
+                    <option value="13:15">13:15</option>
+                    <option value="13:30">13:30</option>
+                    <option value="13:45">13:45</option>
+                    <option value="14:00">14:00</option>
+                    <option value="14:15">14:15</option>
+                    <option value="14:30">14:30</option>
+                    <option value="14:45">14:45</option>
+                    <option value="15:00">15:00</option>
+                    <option value="15:15">15:15</option>
+                    <option value="15:30">15:30</option>
+                    <option value="15:45">15:45</option>
+                    <option value="16:00">16:00</option>
+                    <option value="16:15">16:15</option>
+                    <option value="16:30">16:30</option>
+                    <option value="16:45">16:45</option>
+                    <option value="17:00">17:00</option>
+                    <option value="17:15">17:15</option>
+                    <option value="17:30">17:30</option>
+                    <option value="17:45">17:45</option>
+                    <option value="18:00">18:00</option>
+                    <option value="18:15">18:15</option>
+                    <option value="18:30">18:30</option>
+                    <option value="18:45">18:45</option>
+                    <option value="19:00">19:00</option>
+                    <option value="19:15">19:15</option>
+                    <option value="19:30">19:30</option>
+                    <option value="19:45">19:45</option>
+                    <option value="20:00">20:00</option>
+                  </select>
+                  <label for="time" class="form_label">Giờ</label>
+                </div>
+                <span class="form_messages"></span>
+              </div>
+            </div>
+
+            <div class="col-2">
+              <button
+                type="submit"
+                class="btn btn_primary"
+                style="width: 100%; padding: 15px 12px"
+              >
+                <i class="fa fa-search mr-1" aria-hidden="true"></i>
+                Tìm
+              </button>
+            </div>
+          </div>
+        </form>
+        <hr />
+        <div class="mt-2 text-center">
+          <% if(tables.length > 0){ %>
+          <h2 style="font-size: 20px; padding: 0 14%">
+            Đã tìm thấy <%= tables.length %> bàn phù hợp. Vui lòng đặt trước 1
+            ngày để chúng tôi không bỏ lỡ đơn đặt bàn của bạn.
+          </h2>
+          <div class="tableBook_list mt-3">
+            <% tables.forEach(function(table) { %>
+            <div class="tableBook_item">
+              <div class="tableBook_title">- <%= table.store.storeName %></div>
+              <div class="tableBook_address">
+                Địa chỉ: <%= table.store.address %>
+              </div>
+              <div
+                data-toggle="modal"
+                data-target="#myModal-<%= table.id  %>"
+                class="tableBook_btn"
+              >
+                <%= time %>
+              </div>
+              <!-- The Modal -->
+              <div class="modal" id="myModal-<%= table.id  %>">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                      <h4 class="modal-title">
+                        Xác nhận đặt bàn tại cơ sở - <%= table.store.storeName
+                        %>
+                      </h4>
+                      <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                      </button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">Bạn có chắc muốn đặt bàn?</div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn_primary"
+                        data-dismiss="modal"
+                        onclick="submitBooking('<%= table.id %>')"
+                      >
+                        Xác nhận
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn_secondary"
+                        data-dismiss="modal"
+                      >
+                        Hủy
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /End modal -->
+            </div>
+            <% }); %>
+          </div>
+          <% } else{%>
+          <div>
+            <h1 style="font-size: 20px">Tìm bàn phù hợp</h1>
+          </div>
+          <div class="mt-2">
+            <h1 style="font-size: 20px">Hoặc</h1>
+          </div>
+          <div class="mt-2">
+            <p style="font-size: 14px">
+              Đối với các nhu cầu cụ thể, như nhóm lớn (15 khách trở lên), đặt
+              bàn trước 30 ngày hoặc lựa chọn không gian ưa thích...v.v., vui
+              lòng liên hệ với Dịch vụ Khách hàng của chúng tôi (09:00 - 22:00):
+              <br />
+              Để được hỗ trợ nhiều hơn, vui lòng liên hệ đến Dịch vụ Khách hàng
+              (09:00 - 22:00):
+            </p>
+            <p class="mt-2">Số điện thoại trong nước : 1900 6043</p>
+            <p class="mt-2">Số điện thoại quốc tế: (028) 3622 0500</p>
+          </div>
+          <div class="mt-2">
+            <h1 style="font-size: 20px">
+              Sau khi nhấn phím 1 để chọn Tiếng việt, vui lòng nhấn tiếp phím 1
+              để Đặt bàn.
+            </h1>
+          </div>
+
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- end about section -->
+</div>
+
+<style>
+  .order-section {
+    min-height: 100vh;
+  }
+</style>
+<script src="/admins/js/toast.js"></script>
+<script src="/admins/js/validator.js"></script>
+<script>
+  // Lấy input date
+  var dateInput = document.getElementById("date");
+  // Lấy ngày hiện tại
+  var today = new Date();
+  var year = today.getFullYear();
+  var month = String(today.getMonth() + 1).padStart(2, "0"); // Tháng bắt đầu từ 0, cần +1
+  var day = String(today.getDate() + 1).padStart(2, "0");
+
+  // Format ngày theo yyyy-mm-dd
+  var formattedDate = `${year}-${month}-${day}`;
+  // Kiểm tra nếu không có giá trị
+  if (!dateInput.value) {
+    // Gán giá trị cho input
+    dateInput.value = formattedDate;
+  }
+
+  dateInput.setAttribute("min", formattedDate);
+
+  // Lấy giá trị biến time từ query (ví dụ từ server truyền lên)
+  var queryTime = "<%= time %>"; // Biến này được truyền từ server
+
+  // Lấy phần tử select
+  var timeSelect = document.getElementById("time");
+
+  // Nếu biến time có giá trị
+  if (queryTime) {
+    // Duyệt qua các option để tìm giá trị khớp
+    for (var i = 0; i < timeSelect.options.length; i++) {
+      if (timeSelect.options[i].value === queryTime) {
+        // Gán giá trị được chọn
+        timeSelect.selectedIndex = i;
+        break;
+      }
+    }
+  }
+
+  const submitBooking = (tableId) => {
+    const date = document.querySelector("#date").value;
+    const time = document.querySelector("#time").value;
+    const peopleNumber = document.querySelector("#peopleNumber").value;
+    console.log({ tableId, date, time, peopleNumber });
+
+    $.ajax({
+      type: "POST",
+      url: `/order/booking?tableId=${tableId}`,
+      data: { date, time, peopleNumber },
+      success: function (response) {
+        if (response.code === 1) {
+          toast({
+            title: "Thất bại",
+            message: response.message,
+            type: "error",
+            duration: 1000,
+          });
+        } else {
+          toast({
+            title: "Thành công",
+            message: `Đặt bàn thành công`,
+            type: "success",
+            duration: 1000,
+          });
+          $(".login").addClass("animation");
+          setTimeout(() => {
+            window.location.href = "/order/order-history";
+          }, 1000);
+        }
+      },
+      error: function (error) {
+        toast({
+          title: "Thất bại",
+          message: `Đặt bàn thất bại`,
+          type: "error",
+          duration,
+        });
+      },
+    });
+  };
+</script>

@@ -1,0 +1,59 @@
+.login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #ccc;
+
+    &.animation {
+        .form_login {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .login_animation {
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+
+    .login_animation {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        opacity: 0;
+        transition: all 0.5s;
+        visibility: hidden;
+    }
+
+    .form_login {
+        transition: all 0.5s;
+        padding: 20px;
+        width: 500px;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: $style-shadow;
+    }
+
+    &_title {
+        height: 60px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+
+        h1 {
+            font-size: 18px;
+        }
+
+        img {
+            height: 100%;
+            object-fit: contain;
+        }
+    }
+
+    button {
+        padding: 16px 28px;
+    }
+}

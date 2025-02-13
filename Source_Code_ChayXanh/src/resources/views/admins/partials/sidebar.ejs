@@ -1,0 +1,20 @@
+<div class="sidebar">
+    <ul class="menu">
+        <% let currentTag = '' %> <% menu.forEach(item => { %> <% if
+        (item.display) { %>
+        <!-- Check if display is true -->
+        <% if (item.tag && currentTag !== item.tag) { %> <% currentTag =
+        item.tag %>
+        <li class="menu_item menu_item-title"><%= currentTag %></li>
+        <% } %>
+        <li class="menu_item <%= item.isActive ? 'active' : '' %>">
+            <a href="<%= baseUrl + item.path %>" class="menu_link">
+                <span class="icon">
+                    <i class="<%= item.icon %>"></i>
+                </span>
+                <span class="text"> <%= item.title %> </span>
+            </a>
+        </li>
+        <% } %> <% }) %>
+    </ul>
+</div>

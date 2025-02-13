@@ -1,0 +1,445 @@
+<div class="content_container">
+  <div class="table">
+    <div class="table_head">
+      <div class="table_title">
+        <h1>Bàn đặt</h1>
+      </div>
+      <div class="table_action">
+        <ul class="table_tab">
+          <li class="active"><a href="#">Danh sách</a></li>
+        </ul>
+        <div class="table_totalItem">
+          Tổng: <b id="total_item">0</b> Bàn đặt
+        </div>
+      </div>
+    </div>
+    <div class="table_main animation" id="table_main">
+      <div class="table_loader">
+        <div class="loader"></div>
+      </div>
+      <div class="top_table">
+        <div
+          class="table_right"
+          style="display: flex; align-items: center; gap: 10px"
+        >
+          <!-- <div class="form_group">
+            <div class="form_field">
+              <input
+                placeholder="Ngày bắt đầu"
+                name="startDay"
+                id="startDay"
+                class="form_input"
+                type="date"
+                style="padding: 8px 20px; border-radius: 6px"
+              />
+              <label for="startDay" class="form_label"> Bắt đầu</label>
+            </div>
+          </div>
+          <div class="form_group" style="margin-top: 0">
+            <div class="form_field">
+              <input
+                type="date"
+                placeholder="Ngày kết thúc"
+                name="endDay"
+                id="endDay"
+                class="form_input"
+                style="padding: 8px 20px; border-radius: 6px"
+              />
+              <label for="endDay" class="form_label">Kết thúc</label>
+            </div>
+          </div> -->
+          <div class="table_search">
+            <input
+              id="search"
+              type="text"
+              placeholder="Tìm kiếm..."
+              style="width: auto"
+            />
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+        </div>
+        <div class="table_left">
+          <!-- <button
+            class="modal-open btn btn_primary table_add"
+            data-modal-target="#create-modal"
+          >
+            Thêm mới
+          </button> -->
+        </div>
+      </div>
+      <div class="table_content">
+        <!-- Table root -->
+        <table id="table"></table>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .btn_edit,
+  .btn_show,
+  .btn_delete {
+    display: none;
+  }
+
+  .edit_customer {
+    display: inline-block !important;
+  }
+</style>
+
+<!-- Modal Create -->
+<div id="create-modal" class="modal">
+  <div class="modal_container">
+    <button class="modal_close btn-close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="modal_inner">
+      <h1 class="modal_title">Tạo phiếu đặt bàn</h1>
+      <form class="form mt-5" id="form_create" style="width: 400px">
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="title"
+              id="title"
+              type="text"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="title" class="form_label">Tên danh mục</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+
+        <div class="form_action text-right">
+          <div class="btn btn_secondary modal_close">Huỷ</div>
+          <button type="submit" class="btn btn_primary">Tạo</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- /Modal Create -->
+
+<!-- Modal Edit -->
+<div id="edit-modal" class="modal">
+  <div class="modal_container">
+    <button class="modal_close btn-close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="modal_inner">
+      <h1 class="modal_title">Cập nhật trạng thái</h1>
+      <form class="form mt-5" id="form_edit" style="width: 400px">
+        <div class="form_group" style="display: none">
+          <div class="form_field">
+            <input name="id" id="id" type="text" class="form_input" />
+          </div>
+        </div>
+        <div class="form_group">
+          <div class="form_field">
+            <select
+              name="statusBook"
+              id="statusBook"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            >
+              <option value="3">Đã tới</option>
+              <option value="4">Không tới</option>
+            </select>
+            <label for="title" class="form_label">Cập nhật trạng thái</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+
+        <div class="form_action text-right">
+          <div class="btn btn_secondary modal_close">Huỷ</div>
+          <button type="submit" class="btn btn_primary">Cập nhật</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- /Modal Edit-->
+
+<!-- Modal change store -->
+<div id="change-store-modal" class="modal">
+  <div class="modal_container">
+    <button class="modal_close btn-close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="modal_inner">
+      <h1 class="modal_title">Chuyển chi nhánh</h1>
+      <form class="form mt-5" id="form_change_store" style="width: 400px">
+        <div class="form_group" style="display: none">
+          <div class="form_field">
+            <input name="id" id="id" type="text" class="form_input" />
+          </div>
+        </div>
+        <div class="form_group">
+          <div class="form_field">
+            <select
+              name="storeId"
+              id="storeId"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            ></select>
+            <label for="storeId" class="form_label">Chuyển chi nhánh</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+
+        <div class="form_action text-right">
+          <div class="btn btn_secondary modal_close">Huỷ</div>
+          <button type="submit" class="btn btn_primary">Chuyển</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- /Modal change store-->
+
+<script src="/admins/js/table.js"></script>
+<script src="/admins/js/toast.js"></script>
+<script src="/admins/js/validator.js"></script>
+
+<script>
+  const columns = [
+    { title: "#", field: "index", width: "100px" },
+    { title: "Số bàn", field: "tableNumber", align: "center" },
+    { title: "Họ tên", field: "fullName", align: "center" },
+    { title: "Số điện thoại", field: "phoneNumber", align: "center" },
+    { title: "Số người", field: "peopleNumber", align: "center" },
+    { title: "Ngày", field: "date", align: "center", type: "date" },
+    { title: "Giờ", field: "time", align: "center" },
+    {
+      title: "Trạng thái",
+      field: "statusBook",
+      align: "center",
+      filter: [
+        { 0: "Chờ xác nhận" },
+        { 1: "Đã xác nhận" },
+        { 2: "Đã hủy" },
+        { 3: "Đã tới" },
+        { 4: "Không tới" },
+      ],
+    },
+  ];
+
+  const init = () => {
+    $.ajax({
+      type: "GET",
+      url: "books/all",
+      success: function (response) {
+        const books = response.data;
+
+        // Init table
+        renderTable(books, columns, true, "statusBook");
+
+        // Handle search
+        searchTable(books, "#search", columns, true);
+
+        $("#table_main").removeClass("animation");
+      },
+      error: function (error) {
+        toast({
+          title: "Tải trang thất bại",
+          message: `Lỗi máy chủ`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  };
+
+  init();
+
+  // Handle edit
+  const handleEdit = (id) => {
+    $("#edit-modal").addClass("show");
+    $.ajax({
+      type: "GET",
+      url: `books/${id}`,
+      success: function (response) {
+        const book = response.data;
+
+        $("#form_edit #id").val(book.id);
+        $("#form_edit #statusBook").val(book.statusBook);
+      },
+      error: function (error) {
+        toast({
+          title: "Thất bại",
+          message: `Lỗi hệ thống`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  };
+
+  const handleConfirm = (id) => {
+    $.ajax({
+      type: "GET",
+      url: `/admin/books/confirm/${id}`,
+      success: function (response) {
+        init();
+        toast({
+          title: "Thành công",
+          message: `Xác nhận đặt bàn thành công`,
+          type: "success",
+          duration: 3000,
+        });
+      },
+      error: function (error) {
+        toast({
+          title: "Thất bại",
+          message: `Lỗi hệ thống`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  };
+
+  const handleCancel = (id) => {
+    $.ajax({
+      type: "GET",
+      url: `/admin/books/cancel/${id}`,
+      success: function (response) {
+        init();
+        toast({
+          title: "Thành công",
+          message: `Hủy đặt bàn thành công`,
+          type: "success",
+          duration: 3000,
+        });
+      },
+      error: function (error) {
+        toast({
+          title: "Thất bại",
+          message: `Lỗi hệ thống`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  };
+
+  // Handle validation form edit
+  Validator({
+    form: "#form_edit",
+    formGroupSelector: ".form_group",
+    errorSelector: ".form_messages",
+    rules: [Validator.isRequired("#statusBook", "Vui chọn trạng thái")],
+    onSubmit: (data) => {
+      const { id, ...restData } = data;
+      $("#edit-modal").removeClass("show");
+      $("#table_main").addClass("animation");
+
+      $.ajax({
+        type: "PUT",
+        url: `books/${id}`,
+        data: restData,
+        success: function (response) {
+          if (response.code === 0) {
+            toast({
+              title: "Thành công",
+              message: `Cập nhật trạng thái thành công`,
+              type: "success",
+              duration: 3000,
+            });
+          } else {
+            toast({
+              title: "Thất bại",
+              message: response.message,
+              type: "error",
+              duration: 3000,
+            });
+          }
+          init();
+        },
+        error: function (error) {
+          toast({
+            title: "Thất bại",
+            message: `Cập nhật trạng thái thất bại`,
+            type: "error",
+            duration: 3000,
+          });
+        },
+      });
+    },
+  });
+
+  const handleChange = (id) => {
+    $("#change-store-modal").addClass("show");
+    $("#form_change_store #id").val(id);
+    $.ajax({
+      url: "/admin/stores/getStoreNotCurrentStore",
+      method: "GET",
+      success: (response) => {
+        const stores = response.data;
+        const select = $("#storeId");
+
+        select.empty();
+
+        stores.forEach((store) => {
+          const option = $("<option></option>")
+            .attr("value", store.id)
+            .text(store.storeName);
+          select.append(option);
+        });
+      },
+      error: (error) => {
+        toast({
+          title: "Thất bại",
+          message: `Cập nhật trạng thái thất bại`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  };
+
+  Validator({
+    form: "#form_change_store",
+    formGroupSelector: ".form_group",
+    errorSelector: ".form_messages",
+    rules: [Validator.isRequired("#storeId", "Vui chọn chi nhánh chuyển")],
+    onSubmit: (data) => {
+      const { id, ...restData } = data;
+      $("#change-store-modal").removeClass("show");
+
+      $.ajax({
+        method: "POST",
+        url: `/admin/books/change-store?bookId=${id}`,
+        data: restData,
+        success: function (response) {
+          if (response.code === 0) {
+            toast({
+              title: "Thành công",
+              message: `Chuyển chi nhánh thành công`,
+              type: "success",
+              duration: 3000,
+            });
+          } else {
+            toast({
+              title: "Thất bại",
+              message: response.message,
+              type: "error",
+              duration: 3000,
+            });
+          }
+          init();
+        },
+        error: function (error) {
+          toast({
+            title: "Thất bại",
+            message: `Cập nhật trạng thái thất bại`,
+            type: "error",
+            duration: 3000,
+          });
+        },
+      });
+    },
+  });
+</script>

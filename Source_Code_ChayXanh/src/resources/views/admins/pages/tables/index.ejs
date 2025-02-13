@@ -1,0 +1,462 @@
+<div class="content_container">
+  <div class="table">
+    <div class="table_head">
+      <div class="table_title">
+        <h1>Bàn ăn</h1>
+      </div>
+      <div class="table_action">
+        <ul class="table_tab">
+          <li class="active"><a href="#">Danh sách</a></li>
+        </ul>
+        <div class="table_totalItem">Tổng: <b id="total_item">0</b> Bàn ăn</div>
+      </div>
+    </div>
+    <div class="table_main animation" id="table_main">
+      <div class="table_loader">
+        <div class="loader"></div>
+      </div>
+      <div class="top_table">
+        <div class="table_right">
+          <div class="table_search">
+            <input id="search" type="text" placeholder="Tìm kiếm..." />
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+        </div>
+        <div class="table_left">
+          <button
+            class="modal-open btn btn_primary table_add"
+            data-modal-target="#create-modal"
+          >
+            Thêm mới
+          </button>
+        </div>
+      </div>
+      <div class="table_content">
+        <!-- Table root -->
+        <table id="table"></table>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .btn_cancel,
+  .btn_show,
+  .btn_confirm {
+    display: none;
+  }
+</style>
+<!-- Modal Create -->
+<div id="create-modal" class="modal">
+  <div class="modal_container">
+    <button class="modal_close btn-close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="modal_inner">
+      <h1 class="modal_title">Thêm bàn ăn</h1>
+      <form class="form mt-5" id="form_create" style="width: 700px">
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="tableNumber"
+              id="tableNumber"
+              type="text"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="tableNumber" class="form_label">Số bàn</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="type"
+              id="type"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="type" class="form_label">Loại bàn</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="maximumNumberOfPeople"
+              id="maximumNumberOfPeople"
+              type="number"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="maximumNumberOfPeople" class="form_label"
+              >Số người tối đa</label
+            >
+          </div>
+          <span class="form_messages"></span>
+        </div>
+
+        <div class="form_action text-right">
+          <div class="btn btn_secondary modal_close">Huỷ</div>
+          <button type="submit" class="btn btn_primary">Thêm</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- /Modal Create -->
+
+<!-- Modal Edit -->
+<div id="edit-modal" class="modal">
+  <div class="modal_container">
+    <button class="modal_close btn-close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="modal_inner">
+      <h1 class="modal_title">Cập nhật bàn ăn</h1>
+      <form class="form mt-5" id="form_edit" style="width: 700px">
+        <div class="form_group" style="display: none">
+          <div class="form_field">
+            <input name="id" id="edit_id" type="text" class="form_input" />
+          </div>
+        </div>
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="tableNumber"
+              id="edit_tableNumber"
+              type="text"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="edit_tableNumber" class="form_label">Số bàn</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="type"
+              id="edit_type"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="edit_type" class="form_label">Loại bàn</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              name="maximumNumberOfPeople"
+              id="edit_maximumNumberOfPeople"
+              type="number"
+              class="form_input"
+              placeholder=" "
+              autocomplete="off"
+            />
+            <label for="edit_maximumNumberOfPeople" class="form_label"
+              >Số người tối đa</label
+            >
+          </div>
+          <span class="form_messages"></span>
+        </div>
+        <div class="form_action text-right">
+          <div class="btn btn_secondary modal_close">Huỷ</div>
+          <button type="submit" class="btn btn_primary">Cập nhật</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- /Modal Edit -->
+
+<!-- Modal delete -->
+<div id="delete-modal" class="modal">
+  <div class="modal_container">
+    <button class="modal_close btn-close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="modal_inner">
+      <h1 class="modal_title">Xoá bàn ăn</h1>
+      <div class="form mt-5" id="form_delete" style="width: 450px">
+        <h1>Bạn có chắc muốn xoá bàn ăn này?</h1>
+        <div class="form_action text-right mt-5">
+          <div class="btn btn_secondary modal_close">Huỷ</div>
+          <button type="submit" class="btn btn_primary">Xác nhận</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /Modal delete -->
+
+<script src="/admins/js/table.js"></script>
+<script src="/admins/js/toast.js"></script>
+<script src="/admins/js/validator.js"></script>
+
+<script>
+  const columns = [
+    { title: "#", field: "index", width: "100px" },
+    { title: "Số bàn", field: "tableNumber", align: "center" },
+    { title: "Loại bàn", field: "type", align: "center" },
+    {
+      title: "Số người tối đa",
+      field: "maximumNumberOfPeople",
+      align: "center",
+    },
+  ];
+
+  const init = () => {
+    $.ajax({
+      type: "GET",
+      url: "tables/all",
+      success: function (response) {
+        const tables = response.data;
+
+        // Init table
+        renderTable(tables, columns, true);
+
+        // Handle search
+        searchTable(tables, "#search", columns, true);
+
+        $("#table_main").removeClass("animation");
+      },
+      error: function (error) {
+        toast({
+          title: "Tải trang thất bại",
+          message: `Lỗi máy chủ`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+
+    // Fetch stores and populate select input
+    $.ajax({
+      type: "GET",
+      url: "stores/all",
+      success: function (response) {
+        const stores = response.data;
+        const select = $("#storeId");
+
+        stores.forEach((store) => {
+          const option = $("<option></option>")
+            .attr("value", store.id)
+            .text(store.storeName);
+          select.append(option);
+        });
+      },
+      error: function (error) {
+        toast({
+          title: "Tải danh sách cửa hàng thất bại",
+          message: `Lỗi máy chủ`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  };
+
+  init();
+
+  // Handle edit
+  const handleEdit = (id) => {
+    $("#edit-modal").addClass("show");
+    $.ajax({
+      type: "GET",
+      url: `tables/${id}`,
+      success: function (response) {
+        const table = response.data;
+
+        $("#form_edit #edit_id").val(table.id);
+        $("#form_edit #edit_tableNumber").val(table.tableNumber);
+        $("#form_edit #edit_type").val(table.type);
+        $("#form_edit #edit_maximumNumberOfPeople").val(
+          table.maximumNumberOfPeople
+        );
+
+        // Populate store select
+        $.ajax({
+          type: "GET",
+          url: "stores/all",
+          success: function (storesResponse) {
+            const stores = storesResponse.data;
+            const select = $("#form_edit #edit_storeId");
+            select.empty();
+
+            stores.forEach((store) => {
+              const option = $("<option></option>")
+                .attr("value", store.id)
+                .text(store.storeName);
+              if (store.id === table.storeId) {
+                option.attr("selected", "selected");
+              }
+              select.append(option);
+            });
+          },
+          error: function (error) {
+            toast({
+              title: "Tải danh sách cửa hàng thất bại",
+              message: `Lỗi máy chủ`,
+              type: "error",
+              duration: 3000,
+            });
+          },
+        });
+      },
+      error: function (error) {
+        toast({
+          title: "Thất bại",
+          message: `Lỗi hệ thống`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  };
+
+  const handleDelete = (id) => {
+    $("#delete-modal").addClass("show");
+    $("#delete-modal .btn_primary").data("id", id);
+  };
+
+  // Handle click btn delete
+  $("#delete-modal .btn_primary").on("click", function () {
+    $("#delete-modal").removeClass("show");
+    $("#table_main").addClass("animation");
+    const id = $(this).data("id");
+
+    $.ajax({
+      type: "DELETE",
+      url: `tables/${id}`,
+      success: function (response) {
+        init();
+        toast({
+          title: "Thành công",
+          message: `Xoá bàn ăn thành công`,
+          type: "success",
+          duration: 3000,
+        });
+      },
+      error: function (error) {
+        toast({
+          title: "Thất bại",
+          message: `Lỗi hệ thống`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  });
+
+  // Handle validation form create
+  Validator({
+    form: "#form_create",
+    formGroupSelector: ".form_group",
+    errorSelector: ".form_messages",
+    rules: [
+      Validator.isRequired("#tableNumber", "Vui lòng nhập số bàn."),
+      Validator.isRequired("#type", "Vui lòng nhập loại bàn."),
+      Validator.isRequired(
+        "#maximumNumberOfPeople",
+        "Vui lòng nhập số người tối đa."
+      ),
+    ],
+    onSubmit: (data) => {
+      $("#create-modal").removeClass("show");
+      $("#table_main").addClass("animation");
+
+      $.ajax({
+        type: "POST",
+        url: "tables/",
+        data: data,
+        success: function (response) {
+          if (response.code === 0) {
+            toast({
+              title: "Thành công",
+              message: `Thêm bàn ăn thành công`,
+              type: "success",
+              duration: 3000,
+            });
+          } else {
+            toast({
+              title: "Thất bại",
+              message: response.message,
+              type: "error",
+              duration: 3000,
+            });
+          }
+          init();
+        },
+        error: function (error) {
+          toast({
+            title: "Thất bại",
+            message: `Thêm bàn ăn thất bại`,
+            type: "error",
+            duration: 3000,
+          });
+        },
+      });
+    },
+  });
+
+  // Handle validation form edit
+  Validator({
+    form: "#form_edit",
+    formGroupSelector: ".form_group",
+    errorSelector: ".form_messages",
+    rules: [
+      Validator.isRequired("#edit_tableNumber", "Vui lòng nhập số bàn."),
+      Validator.isRequired("#edit_type", "Vui lòng nhập loại bàn."),
+      Validator.isRequired(
+        "#edit_maximumNumberOfPeople",
+        "Vui lòng nhập số người tối đa."
+      ),
+    ],
+    onSubmit: (data) => {
+      const { id, ...restData } = data;
+      $("#edit-modal").removeClass("show");
+      $("#table_main").addClass("animation");
+
+      $.ajax({
+        type: "PUT",
+        url: `tables/${id}`,
+        data: restData,
+        success: function (response) {
+          if (response.code === 0) {
+            toast({
+              title: "Thành công",
+              message: `Cập nhật bàn ăn thành công`,
+              type: "success",
+              duration: 3000,
+            });
+          } else {
+            toast({
+              title: "Thất bại",
+              message: response.message,
+              type: "error",
+              duration: 3000,
+            });
+          }
+          init();
+        },
+        error: function (error) {
+          toast({
+            title: "Thất bại",
+            message: `Cập nhật bàn ăn thất bại`,
+            type: "error",
+            duration: 3000,
+          });
+        },
+      });
+    },
+  });
+</script>

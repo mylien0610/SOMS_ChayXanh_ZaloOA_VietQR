@@ -1,0 +1,41 @@
+.btn__navigation {
+    padding-bottom: 100px;
+
+    &--link {
+        display: flex;
+        justify-content: center;
+        gap: 0 20px;
+
+        a:first-child {
+            background-color: $primary-color;
+            border-color: $primary-color;
+
+            &:hover {
+                background-color: none;
+                color: #000;
+            }
+        }
+
+        a:last-child {
+            color: $primary-color;
+            border-color: $primary-color;
+
+            &:hover {
+                background-color: $primary-color;
+                color: #000;
+            }
+        }
+    }
+
+    @media (max-width: 739px) {
+        padding-bottom: 50px;
+        text-align: center;
+
+        &--link {
+            display: inline-flex;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px 0;
+        }
+    }
+}

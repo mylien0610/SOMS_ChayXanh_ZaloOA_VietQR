@@ -1,0 +1,103 @@
+<div class="login">
+    <div class="login_animation">
+        <div class="loader"></div>
+    </div>
+    <div class="login_container">
+        <div class="form_login">
+            <div class="login_title">
+                <img src="/admins/img/logo.png" alt="logo" />
+                <h1>Đăng nhập hệ thống</h1>
+            </div>
+            <form class="form mt-5" id="form_login">
+                <div class="form_group">
+                    <div class="form_field">
+                        <input
+                            name="email"
+                            id="email"
+                            type="text"
+                            class="form_input"
+                            placeholder=" "
+                            autocomplete="off"
+                        />
+                        <label for="email" class="form_label">Email</label>
+                    </div>
+                    <span class="form_messages"></span>
+                </div>
+                <div class="form_group">
+                    <div class="form_field">
+                        <input
+                            name="password"
+                            id="password"
+                            type="password"
+                            class="form_input"
+                            placeholder=" "
+                            autocomplete="off"
+                        />
+                        <label for="password" class="form_label"
+                            >Mật khẩu</label
+                        >
+                    </div>
+                    <span class="form_messages"></span>
+                </div>
+
+                <div class="form_action text-right">
+                    <button type="submit" class="btn btn_primary">
+                        Đăng nhập
+                        <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="/admins/js/toast.js"></script>
+<script src="/admins/js/validator.js"></script>
+<script>
+    const duration = 2000;
+    // Handle validation form login
+    Validator({
+        form: '#form_login',
+        formGroupSelector: '.form_group',
+        errorSelector: '.form_messages',
+        rules: [
+            Validator.isRequired('#email', 'Vui lòng nhập  email.'),
+            Validator.isRequired('#password', 'Vui lòng nhập mật khẩu'),
+        ],
+        onSubmit: (data) => {
+            $.ajax({
+                type: 'POST',
+                url: 'signup',
+                data: data,
+                success: function (response) {
+                    if (response.code === 1) {
+                        toast({
+                            title: 'Thất bại',
+                            message: response.message,
+                            type: 'error',
+                            duration,
+                        });
+                    } else {
+                        toast({
+                            title: 'Thành công',
+                            message: `Đăng nhập thành công`,
+                            type: 'success',
+                            duration,
+                        });
+                        $('.login').addClass('animation');
+                        setTimeout(() => {
+                            window.location.href = '/admin/choice-store';
+                        }, duration);
+                    }
+                },
+                error: function (error) {
+                    toast({
+                        title: 'Thất bại',
+                        message: `Dăng nhập thất bại`,
+                        type: 'error',
+                        duration,
+                    });
+                },
+            });
+        },
+    });
+</script>

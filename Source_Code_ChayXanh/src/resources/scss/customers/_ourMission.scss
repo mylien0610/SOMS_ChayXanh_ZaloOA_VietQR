@@ -1,0 +1,93 @@
+.ourMission--wrapper {
+    .ourMission {
+        display: flex;
+        gap: 0 70px;
+
+        &__img {
+            width: 48%;
+            padding: 40px 0px 40px 0px;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-top-left-radius: 25vw;
+                border-top-right-radius: 25vw;
+            }
+        }
+
+        &__content {
+            width: 48%;
+            padding: 40px 0px 40px 0px;
+            margin: auto 0;
+            overflow: hidden;
+
+            &--title {
+                font-size: 74px;
+                font-weight: 600;
+                line-height: 74px;
+                font-family: $heading-font;
+                margin-bottom: 20px;
+            }
+
+            &--text {
+                color: #d3d3d3;
+                font-size: 18px;
+                line-height: 29.88px;
+                margin: 0px 0px 20px;
+                text-align: left;
+            }
+
+            &--btn {
+                margin-top: 20px;
+                background-color: $primary-color;
+                border-color: $primary-color;
+            }
+        }
+
+        @media (max-width: 1023px) {
+            flex-direction: column;
+
+            &__img {
+                width: 380px;
+                margin: 0 auto;
+            }
+
+            &__content {
+                width: 100%;
+                text-align: center;
+
+                &--title {
+                    font-size: 48px;
+                    line-height: 1;
+                }
+
+                &--text {
+                    text-align: center;
+                }
+            }
+        }
+
+        @media (max-width: 739px) {
+            gap: 40px 0;
+
+            &__img {
+                width: 100%;
+                padding: 0;
+
+                img {
+                    border-top-left-radius: 50vw;
+                    border-top-right-radius: 50vw;
+                }
+            }
+
+            &__content {
+                padding: 0;
+
+                &--title {
+                    font-size: 42px;
+                }
+            }
+        }
+    }
+}

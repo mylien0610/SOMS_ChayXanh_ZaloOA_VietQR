@@ -1,0 +1,280 @@
+<div class="content_container">
+    <div class="table">
+        <div class="table_head">
+            <div class="table_title">
+                <h1>Hóa đơn</h1>
+            </div>
+            <div class="table_action">
+                <ul class="table_tab">
+                    <li class="active"><a href="#">Danh sách</a></li>
+                </ul>
+                <div class="table_totalItem">
+                    Tổng: <b id="total_item">0</b> hóa đơn
+                </div>
+            </div>
+        </div>
+        <div class="table_main animation" id="table_main">
+            <div class="table_loader">
+                <div class="loader"></div>
+            </div>
+            <div class="top_table">
+                <div class="table_right">
+                    <div class="table_search">
+                        <input
+                            id="search"
+                            type="text"
+                            placeholder="Tìm kiếm..."
+                        />
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                </div>
+                <div class="table_left"></div>
+            </div>
+            <div class="table_content">
+                <!-- Table root -->
+                <table id="table"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal show -->
+<div id="show-modal" class="modal">
+    <div class="modal_container">
+        <button class="modal_close btn-close">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="modal_inner">
+            <h1 class="modal_title">Chi tiết hóa đơn</h1>
+            <div class="form mt-5" style="width: 1000px">
+                <div class="bill">
+                    <div class="bill__header">
+                        <div id="status"></div>
+                        <p>Mã hóa đơn: <b id="id-order"></b></p>
+                    </div>
+                    <div class="bill__content">
+                        <div class="bill__top">
+                            <div class="bill__info">
+                                <div class="customer__info">
+                                    <p class="customer__position">
+                                        Thông tin khách hàng
+                                    </p>
+                                    <p class="customer__name"></p>
+                                    <p class="customer__phone"></p>
+                                </div>
+                                <div class="bill__receive">
+                                    <div class="receive__title">
+                                        Thông tin thanh toán
+                                    </div>
+                                    <div class="receive__name"></div>
+                                    <div class="receive__phone"></div>
+                                    <div class="receive__address"></div>
+                                    <div class="receive__note"></div>
+                                    <div class="receive__payment"></div>
+                                </div>
+                            </div>
+                            <div class="bill__date">
+                                <p></p>
+                            </div>
+                        </div>
+                        <div class="bill__main">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Số lượng</th>
+                                        <th>Giá</th>
+                                        <th>Thành tiền</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="list-product-order"></tbody>
+                            </table>
+                        </div>
+                        <div class="bill__bottom">
+                            <p class="bill__total" id="bill__total"></p>
+                            <p class="bill__total mt-2" id="voucher"></p>
+                            <p class="bill__total mt-2" id="total_order"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Modal show -->
+
+<style>
+    .btn_delete,
+    .btn_edit,
+    .btn_cancel,
+    .btn_confirm {
+        display: none;
+    }
+</style>
+
+<script src="/admins/js/table.js"></script>
+<script src="/admins/js/toast.js"></script>
+<script src="/admins/js/utils.js"></script>
+
+<script>
+    const columns = [
+        { title: '#', field: 'index', width: '100px' },
+        { title: 'Mã hóa đơn', field: 'id', align: 'center' },
+        {
+            title: 'Số bàn',
+            field: 'tableNumber',
+            align: 'center',
+        },
+        {
+            title: 'Tổng tiền',
+            field: 'totalPrice',
+            type: 'format',
+            align: 'center',
+        },
+        {
+            title: 'Phương thức thanh toán',
+            field: 'paymentMethod',
+            align: 'center',
+        },
+        {
+            title: 'Trạng thái',
+            field: 'statusPay',
+            align: 'center',
+        },
+        {
+            title: 'Ngày thanh toán',
+            field: 'updatedAt',
+            type: 'date',
+            align: 'center',
+        },
+    ];
+
+    const init = () => {
+        $.ajax({
+            type: 'GET',
+            url: '/admin/order-history-data',
+            success: function (response) {
+                const orders = response.data;
+
+                // Init table
+                renderTable(orders, columns, true);
+
+                // Handle search
+                searchTable(orders, '#search', columns, true);
+
+                $('#table_main').removeClass('animation');
+            },
+            error: function (error) {
+                toast({
+                    title: 'Tải trang thất bại',
+                    message: `Lỗi máy chủ`,
+                    type: 'error',
+                    duration: 3000,
+                });
+            },
+        });
+    };
+
+    // Init render data
+    init();
+
+    const handleShow = (id) => {
+        $('#show-modal').addClass('show');
+        let total = 0;
+        $.ajax({
+            url: `/admin/order/detail/${id}`,
+            method: 'GET',
+            success: (response) => {
+                const products = response.data.order.orderDetails.map(
+                    (orderDetail, index) => {
+                        total += orderDetail.price * orderDetail.quantity;
+                        return {
+                            index,
+                            productName: orderDetail.product.title,
+                            quantity: orderDetail.quantity,
+                            price: orderDetail.price,
+                            totalPrice:
+                                orderDetail.quantity * orderDetail.price,
+                        };
+                    }
+                );
+                // Add orderId
+                $('#id-order').text(`#${response.data.order.id}`);
+
+                // Add order detail
+                $('#list-product-order').empty();
+                products.forEach((product) => {
+                    $('#list-product-order').append(`
+                        <tr>
+                            <td>${product.index}</td>
+                            <td>${product.productName}</td>
+                            <td>${product.quantity}</td>
+                            <td>${product.price.toLocaleString(
+                                'vi-VN'
+                            )} VND</td>
+                            <td>${product.totalPrice.toLocaleString(
+                                'vi-VN'
+                            )} VND</td>
+                        </tr>
+                    `);
+                });
+
+                // Customer
+                const phoneNumber = response.data.order.phoneNumber
+                    ? response.data.order.phoneNumber
+                    : 'Không có';
+                $('.customer__phone').text(`Điện thoại: ${phoneNumber}`);
+
+                $('#bill__total').text(
+                    `Tổng tiền: ${total.toLocaleString('vi-VN')} VND`
+                );
+                $('#voucher').text(
+                    `Giảm giá: - ${
+                        response.data.order.voucher
+                            ? (
+                                  (total * response.data.order.voucher.value) /
+                                  100
+                              ).toLocaleString('vi-VN')
+                            : '0'
+                    } VND`
+                );
+
+                $('#total_order').text(
+                    `Thành tiền: ${response.data.order.totalPrice.toLocaleString(
+                        'vi-VN'
+                    )} VND`
+                );
+                $('#status').text(
+                    `Trạng thái: ${response.data.order.statusPay}`
+                );
+                $('.receive__payment').text(
+                    `Phương thức thanh toán: ${response.data.order.paymentMethod}`
+                );
+
+                const dateWithTimezone = new Date(
+                    response.data.order.updatedAt
+                );
+
+                const dateUTC = new Date(dateWithTimezone.toISOString());
+
+                const formattedDate = dateUTC.toLocaleString('en-US', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    timeZone: 'UTC',
+                });
+
+                $('.bill__date p').text(`Ngày thanh toán: ${formattedDate}`);
+            },
+            error: () => {
+                toast({
+                    title: 'Lấy hóa đơn thất bại',
+                    message: `Lỗi máy chủ`,
+                    type: 'error',
+                    duration: 3000,
+                });
+            },
+        });
+    };
+</script>

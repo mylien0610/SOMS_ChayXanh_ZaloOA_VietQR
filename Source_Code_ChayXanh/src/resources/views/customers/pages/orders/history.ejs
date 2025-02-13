@@ -1,0 +1,108 @@
+<div class="sub_page">
+  <div class="hero_area">
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container">
+          <a class="navbar-brand" href="/">
+            <span> Chay Xanh </span>
+          </a>
+          <div class="" id="">
+            <div class="User_option">
+              <% if(customer){ %>
+              <a href="/profile">
+                <i class="fa fa-user" aria-hidden="true"></i>
+                <span><%= customer.fullName %></span>
+              </a>
+              <% }else{ %>
+              <a href="/login">
+                <i class="fa fa-user" aria-hidden="true"></i>
+                <span>Đăng nhập</span>
+              </a>
+              <% } %>
+            </div>
+            <div class="custom_menu-btn">
+              <button onclick="openNav()">
+                <img src="/customers/images/menu.png" alt="" />
+              </button>
+            </div>
+            <div id="myNav" class="overlay">
+              <div class="overlay-content">
+                <a href="/">Trang chủ</a>
+                <a href="/order">Đặt bàn</a>
+                <a href="/order/order-history">Lịch sử đặt bàn</a>
+                <a href="/profile">Tài khoản</a>
+                <a href="/logout">Đăng xuất</a>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+  </div>
+
+  <!-- about section -->
+  <section class="order-section layout_padding">
+    <div class="container">
+      <div class="col-md-11 col-lg-10 mx-auto">
+        <div class="heading_container heading_center">
+          <h2 style="font-family: 'Open Sans', sans-serif">Lịch sử đặt bàn</h2>
+        </div>
+        <hr />
+        <div class="mt-2 text-center">
+          <% if(tables.length > 0){ %>
+          <h2 style="font-size: 20px; padding: 0 14%">
+            Bạn đã đặt <%= tables.length %> bàn.
+          </h2>
+          <div class="tableBook_list mt-3">
+            <% tables.forEach(function(table) { %>
+            <div class="tableBook_item">
+              <div class="tableBook_title">
+                - <%= table.table.store.storeName %>
+              </div>
+              <div class="tableBook_address">
+                Địa chỉ: <%= table.table.store.address %>
+              </div>
+              <div class="tableBook_btn">
+                <%= table.time %> -
+                <script type="text/javascript">
+                  document.write(
+                    new Date(
+                      "<%= table.date.toISOString() %>"
+                    ).toLocaleDateString()
+                  );
+                </script>
+                <% if(table.statusBook == 0){ %>
+                <h1>Chờ xác nhận</h1>
+                <% } else if(table.statusBook ==1){%>
+                <h1>Đặt thành công</h1>
+                <% } else if(table.statusBook== 2){%>
+                <h1>Đã bị hủy</h1>
+                <% } else if(table.statusBook== 3){%>
+                <h1>Đã tới</h1>
+                <% } else if(table.statusBook== 4){%>
+                <h1>Bị hủy do không tới</h1>
+                <% } %>
+              </div>
+            </div>
+            <% }); %>
+          </div>
+          <% } else{%>
+          <div>
+            <h1 style="font-size: 20px">Không có thông tin</h1>
+          </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- end about section -->
+</div>
+
+<style>
+  .order-section {
+    min-height: 100vh;
+  }
+</style>

@@ -1,0 +1,747 @@
+<div class="content_container">
+  <nav class="breadcrumb">
+    <ol class="breadcrumb_container">
+      <li class="breadcrumb-item">
+        <a href="/admin/order/<%= order.tableId %>"
+          >Bàn <%= order.tableNumber %></a
+        >
+      </li>
+      <li class="breadcrumb-item">
+        <i class="fa-solid fa-angle-right"></i>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Thanh toán</li>
+    </ol>
+  </nav>
+  <div class="order_main checkout">
+    <div class="order_container">
+      <div class="info_user">
+        <h1 class="info_user-title">Thông tin khách hàng</h1>
+        <form class="form mt-5" id="form_info">
+          <div class="form_group mt-2" id="fullName">
+            <h4 class="desc_point">Nhập số điện thoại để được tích điểm.</h4>
+            <span id="customer-fullName"></span>
+            <div class="form_field">
+              <input <%= order.phoneNumber ? 'readonly' : '' %>
+              name="phoneNumber" id="phoneNumber" type="text" class="form_input"
+              placeholder=" " autocomplete="off" value="<%= order.phoneNumber ?
+              order.phoneNumber : '' %>" />
+              <label for="edit_phoneNumber" class="form_label"
+                >Số điện thoại</label
+              >
+            </div>
+            <span class="form_messages"></span>
+          </div>
+        </form>
+        <form class="form form_promotion" id="form_voucher">
+          <div class="form_group">
+            <hr />
+            <div class="form_field mt-5">
+              <% if(order.voucher){ %>
+              <input
+                readonly
+                value="<%= order.voucher.voucherCode  %>"
+                name="voucherCode"
+                id="voucherCode"
+                class="form_input"
+                placeholder=" "
+                autocomplete="off"
+              />
+              <% }else{ %>
+              <input
+                name="voucherCode"
+                id="voucherCode"
+                class="form_input"
+                placeholder=" "
+                autocomplete="off"
+              />
+              <% } %>
+
+              <label for="voucherCode" class="form_label">Mã giảm giá</label>
+            </div>
+            <span class="form_messages"></span>
+          </div>
+          <a
+            onclick="handleRemoveVoucher('<%= order.id %>')"
+            href="#"
+            class="btn btn_secondary"
+            id="btn-remove-voucher"
+            >Hủy</a
+          >
+          <button id="btn-add-voucher" class="btn btn_primary">Xác nhận</button>
+        </form>
+        <div class="checkout_banner">
+          <img src="/admins/img/image.jpeg" alt="" />
+        </div>
+      </div>
+      <div class="order_right">
+        <div class="order_title">
+          <h2>Bàn <%= order.table.tableNumber %> - <%= order.table.type %></h2>
+        </div>
+        <div class="order_list" style="height: calc(100vh - 586px)">
+          <% if (order && order.orderDetails && order.orderDetails.length > 0) {
+          %>
+          <table>
+            <tr>
+              <th>Tên</th>
+              <th>Số lượng</th>
+              <th>Thành tiền</th>
+              <th></th>
+            </tr>
+            <% order.orderDetails.forEach(detail => { %>
+            <tr>
+              <td><%= detail.product.title %></td>
+              <td>
+                <span
+                  ><%= (detail.price).toLocaleString() %> x <%= detail.quantity
+                  %></span
+                >
+              </td>
+              <td>
+                <span>
+                  <%= (detail.price * detail.quantity).toLocaleString() %>đ
+                </span>
+              </td>
+            </tr>
+            <% }); %>
+          </table>
+          <% } else { %>
+          <p style="padding: 10px; text-align: center">Vui lòng chọn món</p>
+          <% } %>
+        </div>
+
+        <div class="total_order">
+          <span>Tổng:</span>
+          <span>
+            <%= order && order.totalPrice !== null ?
+            order.totalPrice.toLocaleString() : '0' %> đ
+          </span>
+        </div>
+        <% if(order.voucher){ %>
+        <div class="total_order">
+          <span>Giảm giá: <b><%= order.voucher.value %>%</b> </span>
+          <span id="sale_price">
+            - <%= (order.totalPrice * order.voucher.value /
+            100).toLocaleString() %>đ
+          </span>
+        </div>
+        <% }else{ %>
+        <div class="total_order">
+          <span>Giảm giá:</span>
+          <span id="sale_price"> 0 đ </span>
+        </div>
+        <% } %>
+        <div class="total_order">
+          <span>Thành tiền:</span>
+          <% if(order.voucher){ %>
+          <span id="total_order">
+            <%= order && order.totalPrice !== null && order.voucher &&
+            order.voucher.value ? ((order.totalPrice - (order.totalPrice *
+            order.voucher.value / 100)).toLocaleString()) : '0' %> đ
+          </span>
+
+          <% }else{ %>
+          <span id="total_order">
+            <%= order && order.totalPrice !== null ?
+            order.totalPrice.toLocaleString() : '0' %> đ
+          </span>
+          <% } %>
+        </div>
+        <div
+          onclick="handleOpenModalOtpWhenClick()"
+          style="
+            color: #666;
+            padding: 10px;
+            text-align: right;
+            text-decoration: underline;
+            font-size: 12px;
+            cursor: pointer;
+          "
+        >
+          Sử dụng điểm tích lũy ?
+        </div>
+        <div
+          class="form_group mt-4"
+          id="exchangePoints-wrapper"
+          style="display: none"
+        >
+          <div class="form_field">
+            <select
+              name="exchangePoints"
+              id="exchangePoints"
+              class="form_input"
+            >
+              <option value="0" selected>Không</option>
+            </select>
+            <label for="exchangePoints" class="form_label">
+              Đổi điểm tích lũy
+            </label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+        <div class="form_group mt-4">
+          <div class="form_field">
+            <select name="paymentMethod" id="paymentMethod" class="form_input">
+              <option value="Thanh toán tiền mặt" selected>
+                Thanh toán tiền mặt
+              </option>
+              <option value="Thanh toán qua mã QR">Thanh toán qua mã QR</option>
+            </select>
+            <label for="paymentMethod" class="form_label">
+              Phương thức thanh toán
+            </label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+        <div class="btn_action">
+          <button
+            class="btn btn_primary"
+            onclick="handleCheckout('<%= order.id %>')"
+          >
+            Thanh toán
+          </button>
+          <a
+            href="/admin/order/<%= order.table.id %>"
+            class="btn btn_secondary mt-2"
+          >
+            Hủy
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal payment QR -->
+<div id="qr-modal" class="modal">
+  <div class="modal_container">
+    <button class="modal_close btn-close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="modal_inner">
+      <h1 class="modal_title">Thanh Toán QR</h1>
+      <div class="form mt-5" id="form_delete" style="width: 600px">
+        <div class="qr">
+          <div class="qr-image text-center" id="qr-image">
+            <img src="" alt="" />
+          </div>
+        </div>
+        <div class="form_action text-right mt-5">
+          <div class="btn btn_secondary modal_close">Huỷ</div>
+          <button type="submit" class="btn btn_primary">
+            Xác nhận đã thanh toán
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /Modal payment QR -->
+
+<!-- Modal otp -->
+<div id="otp-modal" class="modal">
+  <div class="modal_container">
+    <button class="modal_close btn-close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="modal_inner">
+      <h1 class="modal_title">Xác nhận sử dụng điểm tích lũy</h1>
+      <div class="form mt-5" id="form_delete" style="width: 450px">
+        <h1>Mã OTP sẽ được gửi về zalo khách hàng khi bạn xác nhận.</h1>
+        <div class="form_action text-right mt-5">
+          <div class="btn btn_secondary modal_close">Huỷ</div>
+          <button
+            type="submit"
+            class="btn btn_primary"
+            onclick="handleUserPointMember()"
+          >
+            Xác nhận
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /Modal otp -->
+
+<!-- Modal submit otp -->
+<div id="submit-otp-modal" class="modal">
+  <div class="modal_container">
+    <button class="modal_close btn-close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="modal_inner">
+      <h1 class="modal_title">Nhập mã OTP</h1>
+      <form class="form mt-5" id="form_otp" style="width: 400px">
+        <div class="form_group">
+          <div class="form_field">
+            <input
+              type="number"
+              class="form_input"
+              name="otpCode"
+              id="otpCode"
+            />
+            <label for="otpCode" class="form_label">OTP</label>
+          </div>
+          <span class="form_messages"></span>
+        </div>
+        <div class="form_action text-right">
+          <div class="btn btn_secondary modal_close">Huỷ</div>
+          <button type="submit" class="btn btn_primary">Gửi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- /Modal submit otp-->
+
+<script src="/admins/js/toast.js"></script>
+<script src="/admins/js/validator.js"></script>
+<script src="/admins/js/utils.js"></script>
+<script>
+  // Format VND
+  const VND = new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  });
+
+  let totalPrice = 0;
+  let order_id = 0;
+
+  $.ajax({
+    url: `/admin/order/getOrder/<%= order.id %>`,
+    method: "GET",
+    success: (response) => {
+      totalPrice = response.data.totalPrice;
+      order_id = response.data.id;
+    },
+    error: (error) => {
+      console.log(error);
+      toast({
+        title: "Thất bại",
+        message: `Lấy hóa đơn thất bại`,
+        type: "error",
+        duration: 3000,
+      });
+    },
+  });
+
+  if ($("#voucherCode").val()) {
+    $("#btn-add-voucher").hide();
+    $("#btn-remove-voucher").show();
+  }
+
+  const handleRemoveVoucher = (orderId) => {
+    $.ajax({
+      url: `/admin/order/remove/${orderId}`,
+      success: (response) => {
+        toast({
+          title: "Thành công",
+          message: `Xóa mã giảm giá thành công`,
+          type: "success",
+          duration: 1000,
+        });
+        $("#exchangePoints").val("0");
+        totalPrice = response.totalPrice;
+        $("#sale_price").text(`${VND.format(0)}`);
+        $("#total_order").text(`${VND.format(totalPrice)}`);
+        $("#voucherCode").val("");
+        $("#voucherCode").attr("readonly", false);
+        $("#btn-add-voucher").show();
+        $("#btn-remove-voucher").hide();
+      },
+      error: () => {
+        toast({
+          title: "Thất bại",
+          message: `Xóa mã giảm giá thất bại`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  };
+
+  // Handle click btn submit pay
+  $("#qr-modal .btn_primary").on("click", function () {
+    $("#qr-modal").removeClass("show");
+    const phoneNumber = $("#phoneNumber").val();
+    const paymentMethod = $("#paymentMethod").val();
+    const exchangePoints = $("#exchangePoints").val();
+
+    $.ajax({
+      url: `/admin/order/checkout/${order_id}`,
+      method: "POST",
+      data: { paymentMethod, phoneNumber, exchangePoints },
+      success: (response) => {
+        toast({
+          title: "Thành công",
+          message: `Thanh toán thành công bàn ${response.tableNumber}`,
+          type: "success",
+          duration: 1000,
+        });
+        setTimeout(() => {
+          window.location.href = "/admin/order/";
+        }, 700);
+      },
+      error: () => {
+        toast({
+          title: "Thất bại",
+          message: `Thanh toán thất bại`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  });
+
+  // Handle checkout
+  const handleCheckout = (orderId) => {
+    const phoneNumber = $("#phoneNumber").val();
+    const paymentMethod = $("#paymentMethod").val();
+    const exchangePoints = $("#exchangePoints").val();
+
+    if (paymentMethod === "Thanh toán qua mã QR") {
+      toast({
+        title: "Đang tạo mã qr...",
+        message: `Hệ thống đang tạo mã, vui lòng đợi...`,
+        type: "success",
+        duration: 2000,
+      });
+      const qrImageUrl = `https://api.vietqr.io/image/970422-061020027979-6dL5KXM.jpg?accountName=NGUYEN%20THI%20MY%20LIEN&amount=${totalPrice}&addInfo=Thanh%20toan%20Chay%20Xanh`;
+
+      const qrImage = $("#qr-image img");
+      qrImage.attr("src", qrImageUrl);
+
+      qrImage.on("load", function () {
+        $("#qr-modal").addClass("show");
+      });
+
+      return;
+    }
+
+    // Send request
+    $.ajax({
+      url: `/admin/order/checkout/${orderId}`,
+      method: "POST",
+      data: { paymentMethod, phoneNumber, exchangePoints },
+      success: (response) => {
+        toast({
+          title: "Thành công",
+          message: `Thanh toán thành công bàn ${response.tableNumber}`,
+          type: "success",
+          duration: 1000,
+        });
+        setTimeout(() => {
+          window.location.href = "/admin/order/";
+        }, 700);
+      },
+      error: () => {
+        toast({
+          title: "Thất bại",
+          message: `Thanh toán thất bại`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  };
+
+  Validator({
+    form: "#form_info",
+    formGroupSelector: ".form_group",
+    errorSelector: ".form_messages",
+    rules: [Validator.isNumber("#phoneNumber", "Vui lòng số điện thoại.")],
+  });
+
+  // Handle add voucher
+  Validator({
+    form: "#form_voucher",
+    formGroupSelector: ".form_group",
+    errorSelector: ".form_messages",
+    rules: [Validator.isRequired("#voucherCode", "Vui lòng nhập mã voucher.")],
+    onSubmit: (data) => {
+      $("#create-modal").removeClass("show");
+      $("#table_main").addClass("animation");
+
+      const handleError = (error) => {
+        toast({
+          title: "Thất bại",
+          message: `Thêm mã giảm giá thất bại`,
+          type: "error",
+          duration: 3000,
+        });
+      };
+      $.ajax({
+        type: "POST",
+        url: "/admin/vouchers/verify",
+        data: data,
+        success: function (response) {
+          if (response.code === 0) {
+            $.ajax({
+              type: "GET",
+              url: `/admin/order/<%= order.id %>/addVoucher/${response.data.id}`,
+              success: (response) => {
+                $("#exchangePoints").val("0");
+                toast({
+                  title: "Thành công",
+                  message: `Thêm mã giảm giá thành công`,
+                  type: "success",
+                  duration: 3000,
+                });
+                $("#sale_price").text(`- ${VND.format(response.salePrice)}`);
+                totalPrice = response.totalPrice - response.salePrice;
+                $("#total_order").text(`${VND.format(totalPrice)}`);
+                $("#voucherCode").val(response.voucher.voucherCode);
+                $("#voucherCode").attr("readonly", true);
+                $("#btn-add-voucher").hide();
+                $("#btn-remove-voucher").show();
+              },
+              error: handleError,
+            });
+          } else {
+            toast({
+              title: "Thất bại",
+              message: response.message,
+              type: "error",
+              duration: 3000,
+            });
+          }
+        },
+        error: handleError,
+      });
+    },
+  });
+
+  // Get phone number customer with load page
+  const value = $("#fullName input").val();
+  if (value) {
+    $.ajax({
+      url: `/admin/customers/check-point-member?phoneNumber=${value}`,
+      method: "GET",
+      success: (response) => {
+        $("#customer-fullName").addClass("active");
+        if (response.data) {
+          const data = response.data;
+
+          // Cập nhật thông tin khách hàng
+          if (data.user) {
+            $("#customer-fullName").text(
+              `${data.user.fullName} - ${data.value} điểm`
+            );
+          } else {
+            $("#customer-fullName").text(
+              `Chưa đăng ký tài khoản - ${data.value} điểm`
+            );
+          }
+
+          // Thêm các tùy chọn vào select
+          const selectElement = $("#exchangePoints");
+          selectElement.empty();
+
+          selectElement.append('<option value="0" selected>Không</option>');
+          const points = data.value;
+          const value = points * 100;
+          selectElement.append(
+            `<option value="${value}">- ${VND.format(value)}</option>`
+          );
+        } else {
+          $("#customer-fullName").text("(Khách hàng mới)");
+        }
+      },
+      error: () => {
+        toast({
+          title: "Thất bại",
+          message: `Thêm mã giảm giá thất bại`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  } else {
+    $("#customer-fullName").removeClass("active");
+  }
+
+  $("#fullName input").on("change", function () {
+    $("#exchangePoints-wrapper").css("display", "none");
+  });
+
+  $("#fullName input").on("blur", function () {
+    const value = $("#fullName input").val();
+    if (value) {
+      $.ajax({
+        url: `/admin/customers/check-point-member?phoneNumber=${value}`,
+        method: "GET",
+        success: (response) => {
+          $("#customer-fullName").addClass("active");
+          if (response.data) {
+            const data = response.data;
+
+            // Cập nhật thông tin khách hàng
+            if (data.user) {
+              $("#customer-fullName").text(
+                `${data.user.fullName} - ${data.value} điểm`
+              );
+            } else {
+              $("#customer-fullName").text(
+                `Chưa đăng ký tài khoản - ${data.value} điểm`
+              );
+            }
+
+            // Thêm các tùy chọn vào select
+            const selectElement = $("#exchangePoints");
+            selectElement.empty();
+
+            selectElement.append('<option value="0" selected>Không</option>');
+            const points = data.value;
+            const value = points * 100;
+            selectElement.append(
+              `<option value="${value}">- ${VND.format(value)}</option>`
+            );
+          } else {
+            $("#customer-fullName").text("(Khách hàng mới)");
+          }
+        },
+        error: () => {
+          toast({
+            title: "Thất bại",
+            message: `Thêm mã giảm giá thất bại`,
+            type: "error",
+            duration: 3000,
+          });
+        },
+      });
+    } else {
+      $("#customer-fullName").removeClass("active");
+    }
+  });
+
+  $("#exchangePoints").on("change", (e) => {
+    const selectedValue = Number(e.target.value);
+    if (selectedValue === 0) {
+      totalPrice += lastValue;
+    } else {
+      totalPrice -= selectedValue;
+    }
+    lastValue = selectedValue;
+    $("#total_order").text(`${VND.format(totalPrice)}`);
+  });
+
+  const handleOpenModalOtpWhenClick = () => {
+    if (!$("#phoneNumber").val()) {
+      toast({
+        title: "Vui lòng nhập số điện thoại",
+        message: `Vui lòng nhập số điện thoại để có thể sử dụng điểm.`,
+        type: "waning",
+        duration: 3000,
+      });
+      $("#phoneNumber").focus();
+      return;
+    }
+
+    $.ajax({
+      url: `/admin/customers/check-point-member?phoneNumber=${$(
+        "#phoneNumber"
+      ).val()}`,
+      method: "GET",
+      success: (response) => {
+        const data = response.data;
+
+        if (data.value == 0) {
+          toast({
+            title: "Không có điểm tích lũy",
+            message: `Điểm tích lũy của bạn là 0. Vui lòng ghé thăm cửa hàng vào lần sau để đổi điểm.`,
+            type: "info",
+            duration: 3000,
+          });
+        } else {
+          $("#otp-modal").addClass("show");
+        }
+      },
+      error: () => {
+        toast({
+          title: "Thất bại",
+          message: `Lấy số điện thoại thất bại`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  };
+
+  const handleUserPointMember = () => {
+    $("#otp-modal").removeClass("show");
+    toast({
+      title: "Đang gửi ...",
+      message: `Mã OTP đang được gửi tới Zalo...`,
+      type: "success",
+      duration: 3000,
+    });
+
+    setTimeout(() => {
+      $("#submit-otp-modal").addClass("show");
+    }, 0);
+    const phoneNumber = $("#phoneNumber").val();
+    $.ajax({
+      url: `/admin/order/send-otp?phoneNumber=${phoneNumber}`,
+      method: "GET",
+      success: (reponse) => {
+        console.log(reponse);
+        toast({
+          title: "Thành công",
+          message: `Gửi mã otp thành công`,
+          type: "success",
+          duration: 3000,
+        });
+      },
+      error: (error) => {
+        toast({
+          title: "Thất bại",
+          message: `Gửi mã otp thất bại`,
+          type: "error",
+          duration: 3000,
+        });
+      },
+    });
+  };
+
+  Validator({
+    form: "#form_otp",
+    formGroupSelector: ".form_group",
+    errorSelector: ".form_messages",
+    rules: [Validator.isRequired("#otpCode", "Vui lòng mã OTP.")],
+    onSubmit: (data) => {
+      const phoneNumbar = $("#phoneNumber").val();
+      console.log(data);
+      $.ajax({
+        url: `/admin/order/verify-otp?phoneNumber=${phoneNumbar}`,
+        method: "POST",
+        data: data,
+        success: (response) => {
+          if (response.code == 0) {
+            toast({
+              title: "Xác nhận mã OTP thành công",
+              message: `Đã xác nhận mã OTP thành công.`,
+              type: "success",
+              duration: 3000,
+            });
+            $("#submit-otp-modal").removeClass("show");
+            $("#exchangePoints-wrapper").css("display", "block");
+          } else {
+            toast({
+              title: "Mã OTP không hợp lệ",
+              message: response.message,
+              type: "error",
+              duration: 3000,
+            });
+          }
+        },
+        error: (error) => {
+          toast({
+            title: "Thất bại",
+            message: `Lỗi hệ thống`,
+            type: "error",
+            duration: 3000,
+          });
+        },
+      });
+    },
+  });
+</script>

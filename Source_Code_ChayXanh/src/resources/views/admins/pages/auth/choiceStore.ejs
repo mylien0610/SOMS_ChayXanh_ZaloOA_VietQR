@@ -1,0 +1,84 @@
+<div class="login">
+    <div class="login_animation">
+        <div class="loader"></div>
+    </div>
+    <div class="login_container">
+        <div class="form_login">
+            <div class="login_title">
+                <img src="/admins/img/logo.png" alt="logo" />
+                <h1>Chọn chi nhánh làm việc</h1>
+            </div>
+            <form class="form mt-5" id="form_login">
+                <div class="form_group mt-4">
+                    <div class="form_field">
+                        <select name="storeId" id="storeId" class="form_input">
+                            <% stores.forEach(item => { %>
+                            <option value="<%= item.id %>" <%= store && store.id === item.id ? 'selected' : '' %> >
+                                <%= item.storeName %>
+                            </option>
+                            <% }); %>
+                        </select>
+                        <label for="storeId" class="form_label"
+                            >Danh sách cửa hàng</label
+                        >
+                    </div>
+                    <span class="form_messages"></span>
+                </div>
+
+                <div class="form_action text-right">
+                    <button type="submit" class="btn btn_primary">
+                        Tiếp tục
+                        <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="/admins/js/toast.js"></script>
+<script src="/admins/js/validator.js"></script>
+<script>
+    const duration = 2000;
+    // Handle validation form login
+    Validator({
+        form: '#form_login',
+        formGroupSelector: '.form_group',
+        errorSelector: '.form_messages',
+        rules: [Validator.isRequired('#storeId', 'Vui lòng chọn cửa hàng.')],
+        onSubmit: (data) => {
+            $.ajax({
+                type: 'GET',
+                url: `save-choice-store/${data.storeId}`,
+                success: function (response) {
+                    if (response.code === 1) {
+                        toast({
+                            title: 'Thất bại',
+                            message: response.message,
+                            type: 'error',
+                            duration,
+                        });
+                    } else {
+                        toast({
+                            title: 'Thành công',
+                            message: `Chọn cửa hàng thành công`,
+                            type: 'success',
+                            duration,
+                        });
+                        $('.login').addClass('animation');
+                        setTimeout(() => {
+                            window.location.href = '/admin';
+                        }, duration);
+                    }
+                },
+                error: function (error) {
+                    toast({
+                        title: 'Thất bại',
+                        message: `Lỗi không chọn được cửa hàng, vui lòng thử lại sau.`,
+                        type: 'error',
+                        duration,
+                    });
+                },
+            });
+        },
+    });
+</script>
